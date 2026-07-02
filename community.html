@@ -1,310 +1,707 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="PeaceBridge Community Voice — share your ideas, suggestions and stories about peace and conflict resolution.">
-<title>Community Voice — PeaceBridge Initiative</title>
-<link rel="icon" type="image/png" sizes="32x32" href="/icon.jpeg">
-<link rel="stylesheet" href="style.css">
-<style>
-.community-layout{ display:grid; grid-template-columns:1fr 320px; gap:28px; align-items:start; }
-@media(max-width:860px){ .community-layout{ grid-template-columns:1fr; } }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="PeaceBridge Community Voice — share your ideas, suggestions and stories about peace and conflict resolution.">
+  <title>Community Voice — PeaceBridge Initiative</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon.jpeg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Grid Systems & Containers */
+    .community-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 28px;
+      align-items: start;
+    }
 
-.post-form-card{ background:#fff; border:1px solid var(--paper-line); border-radius:var(--radius); padding:30px; }
-.post-form-card h3{ margin-bottom:20px; }
+    @media(max-width:860px) {
+      .community-layout {
+        grid-template-columns: 1fr;
+      }
+    }
 
-.category-pills{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
-.cat-pill{ border:2px solid var(--paper-line); border-radius:20px; padding:6px 13px; background:none; cursor:pointer; font-size:.82rem; font-weight:600; color:#566479; transition:all .15s; }
-.cat-pill.active, .cat-pill:hover{ border-color:var(--teal); background:rgba(46,140,158,.08); color:var(--teal-deep); }
+    /* Premium Input Structs & Utilities */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
 
-.feed-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; flex-wrap:wrap; gap:10px; }
-.feed-header h3{ margin:0; }
-.sort-select{ border:1px solid var(--paper-line); border-radius:20px; padding:7px 14px; font-size:.82rem; background:#fff; }
+    .field label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
 
-.comment-card{
-  background:#fff; border:1px solid var(--paper-line); border-radius:var(--radius);
-  padding:22px; transition:box-shadow .2s; animation:msgIn .3s ease;
-}
-@keyframes msgIn{ from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
-.comment-card:hover{ box-shadow:0 8px 20px var(--shadow-c); }
-.comment-header{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-.commenter-avatar{ width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
-.commenter-info .name{ font-weight:700; font-size:.9rem; color:var(--navy); }
-.commenter-info .meta{ font-family:var(--font-mono); font-size:.68rem; color:#8a99b2; margin-top:1px; }
-.comment-cat{ margin-left:auto; flex-shrink:0; }
-.comment-body{ font-size:.93rem; color:#3a4a63; line-height:1.65; margin-bottom:14px; }
-.comment-actions{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-.react-btn{
-  border:1px solid var(--paper-line); border-radius:20px; padding:5px 12px; background:none;
-  font-size:.8rem; cursor:pointer; transition:background .12s; color:#566479; display:flex; align-items:center; gap:4px;
-}
-.react-btn:hover, .react-btn.reacted{ background:rgba(46,140,158,.1); border-color:var(--teal); color:var(--teal-deep); }
-.reply-thread{ border-left:3px solid var(--teal); padding-left:16px; margin-top:14px; display:flex; flex-direction:column; gap:10px; }
-.reply-item{ font-size:.87rem; color:#4b5a72; }
-.reply-name{ font-weight:700; color:var(--navy); }
+    .field input[type="text"],
+    .field textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--paper-line);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      color: var(--navy-ink);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      background: #ffffff;
+    }
 
-.sidebar-pin{ background:#fff; border:1px solid var(--paper-line); border-radius:var(--radius); padding:22px; margin-bottom:16px; }
-.sidebar-pin h4{ font-size:.92rem; margin-bottom:14px; }
-.trending-list{ display:flex; flex-direction:column; gap:8px; }
-.trending-item{ padding:9px 12px; background:var(--paper-dim); border-radius:8px; font-size:.84rem; cursor:pointer; transition:background .12s; border-left:3px solid var(--paper-line); }
-.trending-item:hover{ background:rgba(46,140,158,.08); border-left-color:var(--teal); }
-.trending-item .t-label{ font-weight:700; color:var(--navy-ink); }
-.trending-item .t-count{ font-family:var(--font-mono); font-size:.68rem; color:#8a99b2; }
+    .field input[type="text"]:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(49, 151, 149, 0.12);
+    }
 
-.empty-state{ text-align:center; padding:48px 20px; color:#8a99b2; }
-.empty-state .icon{ font-size:3rem; margin-bottom:12px; }
-.community-stats{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; text-align:center; margin-bottom:28px; }
-.cs-num{ font-family:var(--font-display); font-size:1.8rem; font-weight:800; color:var(--navy); }
-.cs-label{ font-size:.72rem; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.06em; color:#8a99b2; }
-</style>
+    .required-mark {
+      color: #e53e3e;
+      margin-left: 2px;
+    }
+
+    .hint {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #8a99b2;
+      text-align: right;
+      margin-top: 4px;
+    }
+
+    /* Accessible Audio/Microphone Bridge Controls */
+    .mic-input {
+      display: flex;
+      position: relative;
+      width: 100%;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .mic-btn {
+      background: var(--paper-dim);
+      border: 1px solid var(--paper-line);
+      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .mic-btn:hover {
+      background: rgba(46, 140, 158, .08);
+      border-color: var(--teal);
+    }
+
+    .mic-btn.listening {
+      background: #fed7d7;
+      border-color: #f56565;
+      animation: pulseMic 1.4s infinite;
+    }
+
+    @keyframes pulseMic {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Cards & Interaction Wrappers */
+    .post-form-card {
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      border-radius: var(--radius);
+      padding: 30px;
+    }
+
+    .post-form-card h3 {
+      margin-bottom: 20px;
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .cat-pill {
+      border: 2px solid var(--paper-line);
+      border-radius: 20px;
+      padding: 6px 13px;
+      background: none;
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 600;
+      color: #566479;
+      transition: all .15s;
+    }
+
+    .cat-pill.active,
+    .cat-pill:hover {
+      border-color: var(--teal);
+      background: rgba(46, 140, 158, .08);
+      color: var(--teal-deep);
+    }
+
+    .feed-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .feed-header h3 {
+      margin: 0;
+    }
+
+    .sort-select {
+      border: 1px solid var(--paper-line);
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: .82rem;
+      background: #fff;
+      cursor: pointer;
+      color: var(--navy);
+      font-weight: 500;
+    }
+
+    .comment-card {
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      border-radius: var(--radius);
+      padding: 22px;
+      transition: box-shadow .2s;
+      animation: msgIn .3s ease;
+      text-align: left;
+    }
+
+    @keyframes msgIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .comment-card:hover {
+      box-shadow: 0 8px 20px var(--shadow-c);
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .commenter-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    .commenter-info .name {
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--navy);
+    }
+
+    .commenter-info .meta {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: #8a99b2;
+      margin-top: 1px;
+    }
+
+    .comment-cat {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .comment-body {
+      font-size: .93rem;
+      color: #3a4a63;
+      line-height: 1.65;
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .react-btn {
+      border: 1px solid var(--paper-line);
+      border-radius: 20px;
+      padding: 5px 12px;
+      background: none;
+      font-size: .8rem;
+      cursor: pointer;
+      transition: background .12s;
+      color: #566479;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .react-btn:hover,
+    .react-btn.reacted {
+      background: rgba(46, 140, 158, .1);
+      border-color: var(--teal);
+      color: var(--teal-deep);
+    }
+
+    .reply-thread {
+      border-left: 3px solid var(--teal);
+      padding-left: 16px;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--paper-dim);
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .reply-item {
+      font-size: .87rem;
+      color: #4b5a72;
+      line-height: 1.5;
+    }
+
+    .reply-name {
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    /* Sidebar Panels */
+    .sidebar-pin {
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .sidebar-pin h4 {
+      font-size: .92rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trending-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .trending-item {
+      padding: 11px 14px;
+      background: var(--paper-dim);
+      border-radius: 8px;
+      font-size: .84rem;
+      cursor: pointer;
+      transition: all .12s;
+      border-left: 3px solid var(--paper-line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .trending-item:hover {
+      background: rgba(46, 140, 158, .08);
+      border-left-color: var(--teal);
+      transform: translateX(2px);
+    }
+
+    .trending-item .t-label {
+      font-weight: 700;
+      color: var(--navy-ink);
+    }
+
+    .trending-item .t-count {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      color: #8a99b2;
+    }
+
+    /* Empty States & Counter Blocks */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: #8a99b2;
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      border-radius: var(--radius);
+    }
+
+    .empty-state .icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .community-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .community-stats>div {
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      padding: 16px;
+      border-radius: var(--radius);
+    }
+
+    .cs-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    .cs-label {
+      font-size: .72rem;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #8a99b2;
+      margin-top: 4px;
+    }
+
+    /* Informational Alert Box Utility */
+    .alert {
+      display: flex;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .alert-info {
+      background: #ebf8ff;
+      border: 1px solid #bee3f8;
+      color: #2b6cb0;
+    }
+  </style>
 </head>
+
 <body>
-<a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="a11y-bar" role="toolbar" aria-label="Accessibility tools">
-  <div class="container">
-    <span class="a11y-label">Accessibility:</span>
-    <button class="a11y-btn" data-action="font-size"><span class="a11y-size-label">A</span> Text Size</button>
-    <button class="a11y-btn" data-action="contrast" aria-pressed="false">◑ Contrast</button>
-    <button class="a11y-btn" data-action="dyslexic" aria-pressed="false">𝖠 Easy Read</button>
-    <button class="a11y-btn" data-action="read-page" aria-pressed="false">🔊 <span class="a11y-label-text">Read page</span></button>
-    <button class="a11y-btn" data-action="voice-nav">🎤 <span><span class="dot"></span></span> Voice Nav</button>
-  </div>
-</div>
-
-<header class="site-header" role="banner">
-  <nav class="nav" aria-label="Main navigation">
-    <a class="brand" href="index.html"><img src="/icon.jpeg" alt="PeaceBridge" width="46" height="46"><div class="brand-text">PeaceBridge<small>Initiative</small></div></a>
-    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span><span></span><span></span></button>
-    <div class="nav-links" id="nav-links">
-      <a href="index.html">Home</a><a href="about.html">About</a><a href="report.html">Report a Case</a>
-      <a href="dialogue.html">AI Dialogue</a><a href="library.html">Library</a>
-      <a href="community.html" class="active" aria-current="page">Community</a>
-      <a href="certificate.html" class="nav-cta">Get Certificate</a>
-    </div>
-  </nav>
-</header>
-
-<main id="main-content">
-  <div class="page-hero">
+  <div class="a11y-bar" role="toolbar" aria-label="Accessibility tools">
     <div class="container">
-      <p class="eyebrow" style="justify-content:center;color:var(--gold-deep);">🤝 Every Voice Counts</p>
-      <h1>Community Voice</h1>
-      <p>Share your ideas, suggestions, stories, and reflections with the PeaceBridge community. This is your platform.</p>
+      <span class="a11y-label">Accessibility:</span>
+      <button class="a11y-btn" data-action="font-size"><span class="a11y-size-label">A</span> Text Size</button>
+      <button class="a11y-btn" data-action="contrast" aria-pressed="false">◑ Contrast</button>
+      <button class="a11y-btn" data-action="dyslexic" aria-pressed="false">𝖠 Easy Read</button>
+      <button class="a11y-btn" data-action="read-page" aria-pressed="false">🔊 <span class="a11y-label-text">Read
+          page</span></button>
+      <button class="a11y-btn" data-action="voice-nav">🎤 <span><span class="dot"></span></span> Voice Nav</button>
     </div>
   </div>
 
-  <section style="padding:48px 0 80px;">
-    <div class="container">
-
-      <!-- Stats row -->
-      <div class="community-stats reveal" role="region" aria-label="Community statistics">
-        <div><div class="cs-num" id="cs-posts">0</div><div class="cs-label">Posts</div></div>
-        <div><div class="cs-num" id="cs-voices">0</div><div class="cs-label">Voices</div></div>
-        <div><div class="cs-num" id="cs-topics">5</div><div class="cs-label">Topics</div></div>
+  <header class="site-header" role="banner">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html"><img src="/icon.jpeg" alt="PeaceBridge" width="46" height="46">
+        <div class="brand-text">PeaceBridge<small>Initiative</small></div>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links"
+        aria-label="Open menu"><span></span><span></span><span></span></button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html">Home</a><a href="about.html">About</a><a href="report.html">Report a Case</a>
+        <a href="dialogue.html">AI Dialogue</a><a href="library.html">Library</a>
+        <a href="community.html" class="active" aria-current="page">Community</a>
+        <a href="certificate.html" class="nav-cta">Get Certificate</a>
       </div>
+    </nav>
+  </header>
 
-      <div class="community-layout">
-        <!-- MAIN: Submit + Feed -->
-        <div>
-          <!-- Post form -->
-          <div class="post-form-card reveal" role="region" aria-label="Share your voice">
-            <h3>🗣️ Share Your Voice</h3>
-            <div class="field">
-              <label for="post-name">Your name or username (optional — leave blank to post anonymously)</label>
-              <div class="mic-input">
-                <input type="text" id="post-name" placeholder="Anonymous Peacebuilder" maxlength="40">
-                <button class="mic-btn" type="button" id="mic-name" aria-label="Speak your name">🎤</button>
-              </div>
-            </div>
-            <div class="field">
-              <label>Topic category</label>
-              <div class="category-pills" role="group" aria-label="Select topic category">
-                <button class="cat-pill active" data-cat="Idea 💡" onclick="selectCat(this)">💡 Idea</button>
-                <button class="cat-pill" data-cat="Peace Story 🌿" onclick="selectCat(this)">🌿 Peace Story</button>
-                <button class="cat-pill" data-cat="Question ❓" onclick="selectCat(this)">❓ Question</button>
-                <button class="cat-pill" data-cat="Suggestion 📋" onclick="selectCat(this)">📋 Suggestion</button>
-                <button class="cat-pill" data-cat="Election 🗳️" onclick="selectCat(this)">🗳️ Election</button>
-              </div>
-            </div>
-            <div class="field">
-              <label for="post-body">Your message <span class="required-mark">*</span></label>
-              <div class="mic-input" style="align-items:flex-start;">
-                <textarea id="post-body" rows="4" placeholder="Share your peace story, idea, or suggestion… You can also use the mic button to speak instead of typing." maxlength="800" aria-required="true"></textarea>
-                <button class="mic-btn" type="button" id="mic-body" aria-label="Speak your message" style="height:48px;">🎤</button>
-              </div>
-              <div class="hint"><span id="body-count">0</span>/800 characters</div>
-            </div>
-            <div class="alert alert-info" role="note" style="margin-bottom:14px;">
-              <span>ℹ️</span>
-              <span>Comments are stored on your device and are visible to everyone who uses this device. This platform encourages respectful, constructive dialogue — hate speech and threats will not be published.</span>
-            </div>
-            <button class="btn btn-teal btn-lg" onclick="submitPost()">📤 Share with Community</button>
+  <main id="main-content">
+    <div class="page-hero">
+      <div class="container">
+        <p class="eyebrow" style="justify-content:center;color:var(--gold-deep);">🤝 Every Voice Counts</p>
+        <h1>Community Voice</h1>
+        <p>Share your ideas, suggestions, stories, and reflections with the PeaceBridge community. This is your
+          platform.</p>
+      </div>
+    </div>
+
+    <section style="padding:48px 0 80px;">
+      <div class="container">
+
+        <!-- Stats row -->
+        <div class="community-stats reveal" role="region" aria-label="Community statistics">
+          <div>
+            <div class="cs-num" id="cs-posts">0</div>
+            <div class="cs-label">Posts</div>
           </div>
-
-          <!-- Feed -->
-          <div style="margin-top:32px;" role="region" aria-label="Community posts">
-            <div class="feed-header">
-              <h3>Community Posts</h3>
-              <select class="sort-select" id="sort-select" onchange="renderFeed()" aria-label="Sort posts">
-                <option value="newest">Newest first</option>
-                <option value="popular">Most liked</option>
-              </select>
-            </div>
-            <div id="feed" aria-live="polite" style="display:flex;flex-direction:column;gap:16px;"></div>
+          <div>
+            <div class="cs-num" id="cs-voices">0</div>
+            <div class="cs-label">Voices</div>
+          </div>
+          <div>
+            <div class="cs-num" id="cs-topics">5</div>
+            <div class="cs-label">Topics</div>
           </div>
         </div>
 
-        <!-- SIDEBAR -->
-        <div>
-          <div class="sidebar-pin">
-            <h4>📌 Pinned Guidance</h4>
-            <p style="font-size:.85rem;color:#566479;line-height:1.6;">This is a space for respectful community dialogue. Posts that contain threats, hate speech, or personal attacks are not allowed. Share ideas, stories, and suggestions that build bridges.</p>
-          </div>
+        <div class="community-layout">
+          <!-- MAIN: Submit + Feed -->
+          <div>
+            <!-- Post form -->
+            <div class="post-form-card reveal" role="region" aria-label="Share your voice">
+              <h3>🗣️ Share Your Voice</h3>
+              <div class="field">
+                <label Jacks for="post-name">Your name or username (optional — leave blank to post anonymously)</label>
+                <div class="mic-input">
+                  <input type="text" id="post-name" placeholder="Anonymous Peacebuilder" maxlength="40">
+                  <button class="mic-btn" type="button" id="mic-name" aria-label="Speak your name">🎤</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>Topic category</label>
+                <div class="category-pills" role="group" aria-label="Select topic category">
+                  <button class="cat-pill active" data-cat="Idea 💡" onclick="selectCat(this)">💡 Idea</button>
+                  <button class="cat-pill" data-cat="Peace Story 🌿" onclick="selectCat(this)">🌿 Peace Story</button>
+                  <button class="cat-pill" data-cat="Question ❓" onclick="selectCat(this)">❓ Question</button>
+                  <button class="cat-pill" data-cat="Suggestion 📋" onclick="selectCat(this)">📋 Suggestion</button>
+                  <button class="cat-pill" data-cat="Election 🗳️" onclick="selectCat(this)">🗳️ Election</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="post-body">Your message <span class="required-mark">*</span></label>
+                <div class="mic-input" style="align-items:flex-start;">
+                  <textarea id="post-body" rows="4"
+                    placeholder="Share your peace story, idea, or suggestion… You can also use the mic button to speak instead of typing."
+                    maxlength="800" aria-required="true"></textarea>
+                  <button class="mic-btn" type="button" id="mic-body" aria-label="Speak your message"
+                    style="height:48px;">🎤</button>
+                </div>
+                <div class="hint"><span id="body-count">0</span>/800 characters</div>
+              </div>
+              <div class="alert alert-info" role="note" style="margin-bottom:20px;">
+                <span>ℹ️</span>
+                <span>Comments are stored on your device and are visible to everyone who uses this device. This platform
+                  encourages respectful, constructive dialogue — hate speech and threats will not be published.</span>
+              </div>
+              <button class="btn btn-teal btn-lg" onclick="submitPost()">📤 Share with Community</button>
+            </div>
 
-          <div class="sidebar-pin">
-            <h4>🔥 Trending Topics</h4>
-            <div class="trending-list">
-              <div class="trending-item" onclick="filterTopic('Election 🗳️')" role="button" tabindex="0"><div class="t-label">🗳️ Peaceful Elections</div><div class="t-count">Most discussed</div></div>
-              <div class="trending-item" onclick="filterTopic('Peace Story 🌿')" role="button" tabindex="0"><div class="t-label">🌿 Community Stories</div><div class="t-count">Reader favorites</div></div>
-              <div class="trending-item" onclick="filterTopic('Idea 💡')" role="button" tabindex="0"><div class="t-label">💡 Peace Ideas</div><div class="t-count">Most active</div></div>
-              <div class="trending-item" onclick="filterTopic(null)" role="button" tabindex="0"><div class="t-label">🔄 Show All</div></div>
+            <!-- Feed -->
+            <div style="margin-top:32px;" role="region" aria-label="Community posts">
+              <div class="feed-header">
+                <h3>Community Posts</h3>
+                <select class="sort-select" id="sort-select" onchange="renderFeed()" aria-label="Sort posts">
+                  <option value="newest">Newest first</option>
+                  <option value="popular">Most liked</option>
+                </select>
+              </div>
+              <div id="feed" aria-live="polite" style="display:flex;flex-direction:column;gap:16px;"></div>
             </div>
           </div>
 
-          <div class="sidebar-pin">
-            <h4>💬 Community Guidelines</h4>
-            <ul style="font-size:.83rem;color:#4b5a72;padding-left:18px;line-height:2.1;margin:0;">
-              <li>Speak from your own experience</li>
-              <li>Respect different viewpoints</li>
-              <li>No personal attacks or threats</li>
-              <li>Keep it constructive</li>
-              <li>Report conflicts via the <a href="report.html" style="color:var(--teal);">Report page</a></li>
-            </ul>
+          <!-- SIDEBAR -->
+          <div>
+            <div class="sidebar-pin">
+              <h4>📌 Pinned Guidance</h4>
+              <p style="font-size:.85rem;color:#566479;line-height:1.6;">This is a space for respectful community
+                dialogue. Posts that contain threats, hate speech, or personal attacks are not allowed. Share ideas,
+                stories, and suggestions that build bridges.</p>
+            </div>
+
+            <div class="sidebar-pin">
+              <h4>🔥 Trending Topics</h4>
+              <div class="trending-list">
+                <div class="trending-item" onclick="filterTopic('Election 🗳️')" role="button" tabindex="0">
+                  <div class="t-label">🗳️ Peaceful Elections</div>
+                  <div class="t-count">Most discussed</div>
+                </div>
+                <div class="trending-item" onclick="filterTopic('Peace Story 🌿')" role="button" tabindex="0">
+                  <div class="t-label">🌿 Community Stories</div>
+                  <div class="t-count">Reader favorites</div>
+                </div>
+                <div class="trending-item" onclick="filterTopic('Idea 💡')" role="button" tabindex="0">
+                  <div class="t-label">💡 Peace Ideas</div>
+                  <div class="t-count">Most active</div>
+                </div>
+                <div class="trending-item" onclick="filterTopic(null)" role="button" tabindex="0">
+                  <div class="t-label">🔄 Show All</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-pin">
+              <h4>💬 Community Guidelines</h4>
+              <ul style="font-size:.83rem;color:#4b5a72;padding-left:18px;line-height:2.1;margin:0;">
+                <li>Speak from your own experience</li>
+                <li>Respect different viewpoints</li>
+                <li>No personal attacks or threats</li>
+                <li>Keep it constructive</li>
+                <li>Report conflicts via the <a href="report.html"
+                    style="color:var(--teal); font-weight: 600; text-decoration: none;">Report page</a></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0;">
+        <span>© 2025–2026 PeaceBridge Initiative</span>
+        <span>🌿 Copyright @catsrovercrew.ug 🌿</span>
+      </div>
     </div>
-  </section>
-</main>
+  </footer>
 
-<footer role="contentinfo">
-  <div class="container">
-    <div class="footer-bottom" style="border-top:none;padding-top:0;">
-      <span>© 2025–2026 PeaceBridge Initiative</span>
-      <span>🌿 Copyright @catsrovercrew.ug 🌿</span>
-    </div>
-  </div>
-</footer>
+  <button class="to-top" aria-label="Back to top">↑</button>
+  <script src="/app.js"></script>
+  <script>
+    const AVATAR_COLORS = ['#1B3358', '#3F7D3F', '#D9A53D', '#2E8C9E', '#8B4F9E'];
+    const AVATAR_EMOJIS = ['🕊️', '🤝', '🌿', '💬', '⭐', '🌍', '👥', '📖'];
+    let selectedCat = 'Idea 💡';
+    let filterCat = null;
 
-<button class="to-top" aria-label="Back to top">↑</button>
-<script src="/app.js"></script>
-<script>
-const AVATAR_COLORS = ['#1B3358','#3F7D3F','#D9A53D','#2E8C9E','#8B4F9E'];
-const AVATAR_EMOJIS = ['🕊️','🤝','🌿','💬','⭐','🌍','👥','📖'];
-let selectedCat = 'Idea 💡';
-let filterCat = null;
+    const SEED_POSTS = [
+      { id: 'seed1', name: 'Grace Nakato', cat: 'Peace Story 🌿', body: 'In our village, two families had not spoken for five years over a land boundary. Last month, the LC chairman organized a meeting with both sides and a surveyor. After one afternoon of honest talking, they agreed on a boundary and shook hands. It took one brave leader to call the meeting. That is all it ever takes.', date: '2026-06-14T09:00:00', likes: 14, replies: [{ name: 'PeaceBridge Team', text: 'Thank you for sharing this. This is exactly what peacebuilding looks like.' }] },
+      { id: 'seed2', name: 'Anonymous', cat: 'Election 🗳️', body: 'My suggestion: every polling station should have a peace ambassador — a young person trained to de-escalate tension if arguments start. They don\'t need authority, just training and a vest. PeaceBridge should run that training.', date: '2026-06-13T14:30:00', likes: 21, replies: [] },
+      { id: 'seed3', name: 'Teacher Okello', cat: 'Idea 💡', body: 'I use the PeaceBridge books in my classroom. Students who read "Voices Across the River" started writing letters to students in the next village. Now we want to arrange a joint sports day. Peace education works best when it starts young.', date: '2026-06-12T11:15:00', likes: 18, replies: [{ name: 'Community Member', text: 'This is beautiful. Let us know how the sports day goes!' }] },
+      { id: 'seed4', name: 'Mama Rose', cat: 'Suggestion 📋', body: 'Please add a feature where we can report land grabs happening to elderly people who do not have smartphones. Many of them are losing land because they cannot file anything. Can PeaceBridge have an agent in each sub-county?', date: '2026-06-11T16:45:00', likes: 9, replies: [] },
+    ];
 
-// Seed with demo posts so the board isn't empty on first visit
-const SEED_POSTS = [
-  {id:'seed1', name:'Grace Nakato', cat:'Peace Story 🌿', body:'In our village, two families had not spoken for five years over a land boundary. Last month, the LC chairman organized a meeting with both sides and a surveyor. After one afternoon of honest talking, they agreed on a boundary and shook hands. It took one brave leader to call the meeting. That is all it ever takes.', date:'2026-06-14T09:00:00', likes:14, replies:[{name:'PeaceBridge Team',text:'Thank you for sharing this. This is exactly what peacebuilding looks like.'}]},
-  {id:'seed2', name:'Anonymous', cat:'Election 🗳️', body:'My suggestion: every polling station should have a peace ambassador — a young person trained to de-escalate tension if arguments start. They don\'t need authority, just training and a vest. PeaceBridge should run that training.', date:'2026-06-13T14:30:00', likes:21, replies:[]},
-  {id:'seed3', name:'Teacher Okello', cat:'Idea 💡', body:'I use the PeaceBridge books in my classroom. Students who read "Voices Across the River" started writing letters to students in the next village. Now we want to arrange a joint sports day. Peace education works best when it starts young.', date:'2026-06-12T11:15:00', likes:18, replies:[{name:'Community Member',text:'This is beautiful. Let us know how the sports day goes!'}]},
-  {id:'seed4', name:'Mama Rose', cat:'Suggestion 📋', body:'Please add a feature where we can report land grabs happening to elderly people who do not have smartphones. Many of them are losing land because they cannot file anything. Can PeaceBridge have an agent in each sub-county?', date:'2026-06-11T16:45:00', likes:9, replies:[]},
-];
+    function loadPosts() {
+      if (!window.PB || !PB.store) return SEED_POSTS;
+      const stored = PB.store.get('community_posts', []);
+      const allIds = stored.map(p => p.id);
+      const seeds = SEED_POSTS.filter(s => !allIds.includes(s.id));
+      return [...stored, ...seeds];
+    }
 
-function loadPosts(){
-  const stored = PB.store.get('community_posts',[]);
-  // Merge seeds with stored (seeds at the bottom)
-  const allIds = stored.map(p=>p.id);
-  const seeds = SEED_POSTS.filter(s=>!allIds.includes(s.id));
-  return [...stored, ...seeds];
-}
+    function savePosts(posts) {
+      if (!window.PB || !PB.store) return;
+      const userPosts = posts.filter(p => !p.id.startsWith('seed'));
+      PB.store.set('community_posts', userPosts);
+    }
 
-function savePosts(posts){
-  // Only save user-generated posts (not seeds)
-  const userPosts = posts.filter(p=>!p.id.startsWith('seed'));
-  PB.store.set('community_posts', userPosts);
-}
+    let allPosts = loadPosts();
 
-let allPosts = loadPosts();
+    function selectCat(btn) {
+      document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCat = btn.getAttribute('data-cat');
+    }
 
-function selectCat(btn){
-  document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedCat = btn.getAttribute('data-cat');
-}
+    function filterTopic(cat) {
+      filterCat = cat;
+      renderFeed();
+    }
 
-function filterTopic(cat){
-  filterCat = cat;
-  renderFeed();
-}
+    function submitPost() {
+      const name = document.getElementById('post-name').value.trim() || 'Anonymous';
+      const body = document.getElementById('post-body').value.trim();
+      if (!body || body.length < 10) { alert('Please write at least 10 characters before posting.'); return; }
 
-function submitPost(){
-  const name = document.getElementById('post-name').value.trim() || 'Anonymous';
-  const body = document.getElementById('post-body').value.trim();
-  if(!body || body.length < 10){ alert('Please write at least 10 characters before posting.'); return; }
+      const blockedWords = /\b(kill|murder|attack|rape|bomb)\b/i;
+      if (blockedWords.test(body)) { alert('Your message contains language that goes against our community guidelines. Please revise it.'); return; }
 
-  // Basic safety filter
-  const blockedWords = /\b(kill|murder|attack|rape|bomb)\b/i;
-  if(blockedWords.test(body)){ alert('Your message contains language that goes against our community guidelines. Please revise it.'); return; }
+      const generatedId = (window.PB && typeof PB.uid === 'function') ? PB.uid('POST') : 'user_' + Math.random().toString(36).substr(2, 9);
+      const post = { id: generatedId, name, cat: selectedCat, body, date: new Date().toISOString(), likes: 0, replies: [] };
+      allPosts.unshift(post);
+      savePosts(allPosts);
+      document.getElementById('post-name').value = '';
+      document.getElementById('post-body').value = '';
+      document.getElementById('body-count').textContent = '0';
+      renderFeed();
+      updateStats();
+      if (window.PB && typeof PB.announce === 'function') PB.announce('Your post has been shared with the community. Thank you!');
+    }
 
-  const post = { id: PB.uid('POST'), name, cat: selectedCat, body, date: new Date().toISOString(), likes:0, replies:[] };
-  allPosts.unshift(post);
-  savePosts(allPosts);
-  document.getElementById('post-body').value='';
-  document.getElementById('body-count').textContent='0';
-  renderFeed();
-  updateStats();
-  PB.announce('Your post has been shared with the community. Thank you!');
-}
+    function likePost(id) {
+      const post = allPosts.find(p => p.id === id);
+      if (post) { post.likes = (post.likes || 0) + 1; savePosts(allPosts); renderFeed(); }
+    }
 
-function likePost(id){
-  const post = allPosts.find(p=>p.id===id);
-  if(post){ post.likes = (post.likes||0)+1; savePosts(allPosts); renderFeed(); }
-}
+    function renderFeed() {
+      const sort = document.getElementById('sort-select').value;
+      let posts = [...allPosts];
+      if (filterCat) posts = posts.filter(p => p.cat === filterCat);
+      if (sort === 'popular') posts.sort((a, b) => (b.likes || 0) - (a.likes || 0));
 
-function renderFeed(){
-  const sort = document.getElementById('sort-select').value;
-  let posts = [...allPosts];
-  if(filterCat) posts = posts.filter(p=>p.cat===filterCat);
-  if(sort==='popular') posts.sort((a,b)=>(b.likes||0)-(a.likes||0));
+      const feed = document.getElementById('feed');
+      if (!posts.length) {
+        feed.innerHTML = `<div class="empty-state"><div class="icon">💬</div><p>No posts yet${filterCat ? ' in this category' : ''}. Be the first to share!</p></div>`;
+        return;
+      }
 
-  const feed = document.getElementById('feed');
-  if(!posts.length){
-    feed.innerHTML=`<div class="empty-state"><div class="icon">💬</div><p>No posts yet${filterCat?' in this category':''}. Be the first to share!</p></div>`;
-    return;
-  }
-
-  feed.innerHTML = posts.map(p=>{
-    const initials = p.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    const color = AVATAR_COLORS[Math.abs(p.name.charCodeAt(0)||0)%AVATAR_COLORS.length];
-    const emoji = AVATAR_EMOJIS[Math.abs((p.name.charCodeAt(1)||0))%AVATAR_EMOJIS.length];
-    const timeAgo = formatTimeAgo(new Date(p.date));
-    const repliesHtml = (p.replies||[]).map(r=>`<div class="reply-item"><span class="reply-name">${esc(r.name)}</span>: ${esc(r.text)}</div>`).join('');
-    return `
+      feed.innerHTML = posts.map(p => {
+        const color = AVATAR_COLORS[Math.abs(p.name.charCodeAt(0) || 0) % AVATAR_COLORS.length];
+        const emoji = AVATAR_EMOJIS[Math.abs((p.name.charCodeAt(1) || 0)) % AVATAR_EMOJIS.length];
+        const timeAgo = formatTimeAgo(new Date(p.date));
+        const repliesHtml = (p.replies || []).map(r => `<div class="reply-item"><span class="reply-name">${esc(r.name)}</span>: ${esc(r.text)}</div>`).join('');
+        return `
     <div class="comment-card" id="post-${p.id}">
       <div class="comment-header">
-        <div class="commenter-avatar" style="background:${color}1a;color:${color};" aria-hidden="true">${p.name==='Anonymous'?'🕊️':emoji}</div>
+        <div class="commenter-avatar" style="background:${color}1a;color:${color};" aria-hidden="true">${p.name === 'Anonymous' ? '🕊️' : emoji}</div>
         <div class="commenter-info">
           <div class="name">${esc(p.name)}</div>
           <div class="meta">${timeAgo}</div>
         </div>
         <div class="comment-cat">
-          <span class="pill pill-teal" style="font-size:.68rem;">${esc(p.cat)}</span>
+          <span class="pill pill-green" style="font-size:.68rem;">${esc(p.cat)}</span>
         </div>
       </div>
       <div class="comment-body">${esc(p.body)}</div>
       <div class="comment-actions">
-        <button class="react-btn" onclick="likePost('${p.id}')" aria-label="Like this post">👍 ${p.likes||0}</button>
+        <button class="react-btn" onclick="likePost('${p.id}')" aria-label="Like this post">👍 ${p.likes || 0}</button>
         <button class="react-btn" onclick="replyTo('${p.id}')" aria-label="Reply to this post">💬 Reply</button>
-        <span style="font-size:.75rem;color:#aab;margin-left:auto;">${(p.body||'').length} chars</span>
+        <span style="font-size:.75rem;color:#8a99b2;margin-left:auto;font-family:var(--font-mono);">${(p.body || '').length} chars</span>
       </div>
-      ${repliesHtml ? `<div class="reply-thread">${repliesHtml}</div>`:''}
-      <div id="reply-form-${p.id}" style="display:none;margin-top:12px;">
+      ${repliesHtml ? `<div class="reply-thread">${repliesHtml}</div>` : ''}
+      <div id="reply-form-${p.id}" style="display:none;margin-top:16px;">
         <div class="mic-input" style="align-items:flex-start;">
-          <textarea id="reply-text-${p.id}" rows="2" placeholder="Write a respectful reply…" style="border:2px solid var(--paper-line);border-radius:10px;padding:10px;font-family:inherit;font-size:.88rem;width:100%;resize:none;"></textarea>
+          <textarea id="reply-text-${p.id}" rows="2" placeholder="Write a respectful reply…" style="border:1px solid var(--paper-line);border-radius:8px;padding:10px;font-family:inherit;font-size:.88rem;width:100%;resize:none;"></textarea>
           <button class="mic-btn" type="button" id="mic-reply-${p.id}" aria-label="Speak reply">🎤</button>
         </div>
         <div style="display:flex;gap:8px;margin-top:8px;">
@@ -313,56 +710,60 @@ function renderFeed(){
         </div>
       </div>
     </div>`;
-  }).join('');
+      }).join('');
 
-  // Attach mic to reply forms
-  posts.forEach(p=>{
-    const micBtn = document.getElementById('mic-reply-'+p.id);
-    const textArea = document.getElementById('reply-text-'+p.id);
-    if(micBtn && textArea) PB.attachMic(micBtn, textArea);
-  });
-}
+      posts.forEach(p => {
+        const micBtn = document.getElementById('mic-reply-' + p.id);
+        const textArea = document.getElementById('reply-text-' + p.id);
+        if (micBtn && textArea && window.PB && typeof PB.attachMic === 'function') PB.attachMic(micBtn, textArea);
+      });
+    }
 
-function replyTo(id){
-  const form = document.getElementById('reply-form-'+id);
-  if(form) form.style.display = form.style.display==='none' ? 'block':'none';
-}
+    function replyTo(id) {
+      const form = document.getElementById('reply-form-' + id);
+      if (form) form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
 
-function submitReply(id){
-  const text = (document.getElementById('reply-text-'+id)||{}).value || '';
-  if(!text.trim()) return;
-  const post = allPosts.find(p=>p.id===id);
-  if(post){
-    post.replies = post.replies || [];
-    post.replies.push({name:'Community Member', text:text.trim()});
-    savePosts(allPosts);
-    renderFeed();
-  }
-}
+    function submitReply(id) {
+      const text = (document.getElementById('reply-text-' + id) || {}).value || '';
+      if (!text.trim()) return;
+      const post = allPosts.find(p => p.id === id);
+      if (post) {
+        post.replies = post.replies || [];
+        post.replies.push({ name: 'Community Member', text: text.trim() });
+        savePosts(allPosts);
+        renderFeed();
+      }
+    }
 
-function updateStats(){
-  document.getElementById('cs-posts').textContent = allPosts.length;
-  document.getElementById('cs-voices').textContent = new Set(allPosts.map(p=>p.name)).size;
-}
+    function updateStats() {
+      const postsCount = document.getElementById('cs-posts');
+      const voicesCount = document.getElementById('cs-voices');
+      if (postsCount) postsCount.textContent = allPosts.length;
+      if (voicesCount) voicesCount.textContent = new Set(allPosts.map(p => p.name)).size;
+    }
 
-function formatTimeAgo(date){
-  const diff = (Date.now()-date)/1000;
-  if(diff<60) return 'Just now';
-  if(diff<3600) return Math.floor(diff/60)+'m ago';
-  if(diff<86400) return Math.floor(diff/3600)+'h ago';
-  return Math.floor(diff/86400)+'d ago';
-}
+    function formatTimeAgo(date) {
+      const diff = (Date.now() - date) / 1000;
+      if (diff < 60) return 'Just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      return Math.floor(diff / 86400) + 'd ago';
+    }
 
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function esc(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
-// Character counter
-document.addEventListener('DOMContentLoaded', function(){
-  const body = document.getElementById('post-body');
-  if(body) body.addEventListener('input', function(){ document.getElementById('body-count').textContent = this.value.length; });
-  PB.attachMic(document.getElementById('mic-name'), document.getElementById('post-name'));
-  PB.attachMic(document.getElementById('mic-body'), document.getElementById('post-body'));
-  renderFeed(); updateStats();
-});
-</script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const body = document.getElementById('post-body');
+      if (body) body.addEventListener('input', function () { document.getElementById('body-count').textContent = this.value.length; });
+
+      if (window.PB && typeof PB.attachMic === 'function') {
+        PB.attachMic(document.getElementById('mic-name'), document.getElementById('post-name'));
+        PB.attachMic(document.getElementById('mic-body'), document.getElementById('post-body'));
+      }
+      renderFeed(); updateStats();
+    });
+  </script>
 </body>
+
 </html>
