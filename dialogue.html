@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Talk to the PeaceBridge AI Dialogue Assistant anonymously about conflicts, tensions or problems you are facing in your community.">
+  <title>AI Dialogue Assistant — PeaceBridge Initiative</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="icon.jpeg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 28px;
+      align-items: start;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 28px 80px;
+    }
+
+    @media(max-width:860px) {
+      .chat-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chat-window {
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      height: 72vh;
+      min-height: 480px;
+      max-height: 700px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(27, 51, 88, .10);
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--teal), var(--teal-deep));
+      color: #fff;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .chat-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .chat-header-info h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+
+    .chat-header-info small {
+      font-size: .75rem;
+      opacity: .85;
+    }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      display: inline-block;
+      margin-right: 5px;
+      animation: pulse 2s infinite;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: var(--paper-line);
+      border-radius: 4px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 10px;
+      max-width: 82%;
+      animation: msgIn .25s ease;
+    }
+
+    @keyframes msgIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg.user {
+      margin-left: auto;
+      flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .bot-av {
+      background: rgba(46, 140, 158, .15);
+      color: var(--teal-deep);
+    }
+
+    .user-av {
+      background: rgba(27, 51, 88, .12);
+      color: var(--navy);
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: .92rem;
+      line-height: 1.55;
+    }
+
+    .msg.bot .msg-bubble {
+      background: var(--paper-dim);
+      color: var(--navy-ink);
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg.user .msg-bubble {
+      background: var(--navy);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.urgent .msg-bubble {
+      background: #FDE8E8;
+      border: 1px solid #f5b9b9;
+      color: #7a1212;
+    }
+
+    .msg-time {
+      font-size: .68rem;
+      opacity: .55;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .msg-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .msg-action-btn:hover {
+      background: var(--teal-deep);
+    }
+
+    .chat-input-row {
+      padding: 14px 16px;
+      border-top: 1px solid var(--paper-line);
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-shrink: 0;
+      background: #fff;
+    }
+
+    .chat-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .chat-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--paper-line);
+      border-radius: 24px;
+      font-family: inherit;
+      font-size: .93rem;
+      resize: none;
+      max-height: 120px;
+      overflow-y: auto;
+      transition: border-color .15s;
+      background: var(--paper);
+    }
+
+    .chat-input:focus {
+      border-color: var(--teal);
+      outline: none;
+    }
+
+    .char-count {
+      position: absolute;
+      bottom: 8px;
+      right: 14px;
+      font-size: .68rem;
+      color: #aab;
+    }
+
+    .send-btn {
+      background: var(--teal);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .send-btn:hover {
+      background: var(--teal-deep);
+    }
+
+    .mic-chat-btn {
+      background: var(--paper-dim);
+      border: 1px solid var(--paper-line);
+      color: var(--navy);
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .mic-chat-btn.listening {
+      background: #E4503B;
+      color: #fff;
+      animation: pulse 1s infinite;
+    }
+
+    /* Typing indicator dots animation */
+    .typing-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 20px;
+    }
+
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      background: var(--teal-deep);
+      border-radius: 50%;
+      display: inline-block;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dots span:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    /* Sidebar */
+    .chat-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .side-card {
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      border-radius: var(--radius);
+      padding: 22px;
+    }
+
+    .side-card h4 {
+      font-size: .95rem;
+      margin-bottom: 12px;
+      color: var(--navy);
+    }
+
+    .cmd-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .cmd-list li button {
+      width: 100%;
+      text-align: left;
+      padding: 9px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--paper-line);
+      background: var(--paper-dim);
+      font-size: .82rem;
+      cursor: pointer;
+      color: var(--navy-ink);
+      transition: background .12s;
+    }
+
+    .cmd-list li button:hover {
+      background: rgba(46, 140, 158, .1);
+    }
+
+    /* Mood selector */
+    .mood-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .mood-btn {
+      border: 2px solid var(--paper-line);
+      border-radius: 20px;
+      padding: 6px 12px;
+      background: none;
+      cursor: pointer;
+      font-size: .82rem;
+      transition: all .15s;
+      color: var(--navy-ink);
+    }
+
+    .mood-btn:hover,
+    .mood-btn.active {
+      border-color: var(--teal);
+      background: rgba(46, 140, 158, .1);
+    }
+
+    .session-stats {
+      font-size: .8rem;
+      color: #7a8da6;
+    }
+
+    .session-stats span {
+      display: block;
+      padding: 4px 0;
+    }
+
+    .warning-emergency {
+      background: #FDE8E8;
+      border: 1px solid #f5b9b9;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: .84rem;
+      color: #7a1212;
+    }
+
+    .warning-emergency a {
+      color: inherit;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="a11y-bar" role="toolbar" aria-label="Accessibility tools">
+    <div class="container">
+      <span class="a11y-label">Accessibility:</span>
+      <button class="a11y-btn" data-action="font-size"><span class="a11y-size-label">A</span> Text Size</button>
+      <button class="a11y-btn" data-action="contrast" aria-pressed="false">◑ Contrast</button>
+      <button class="a11y-btn" data-action="dyslexic" aria-pressed="false">𝖠 Easy Read</button>
+      <button class="a11y-btn" data-action="read-page" aria-pressed="false">🔊 <span class="a11y-label-text">Read
+          page</span></button>
+      <button class="a11y-btn" data-action="voice-nav">🎤 <span><span class="dot"></span></span> Voice Nav</button>
+    </div>
+  </div>
+
+  <header class="site-header" role="banner">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html"><img src="icon.jpeg" alt="PeaceBridge" width="46" height="46">
+        <div class="brand-text">PeaceBridge<small>Initiative</small></div>
+      </a>
+      <button class="nav-toggle" id="nav-toggle-btn" aria-expanded="false" aria-controls="nav-links"
+        aria-label="Open menu"><span></span><span></span><span></span></button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html">Home</a><a href="about.html">About</a><a href="report.html">Report a Case</a>
+        <a href="dialogue.html" class="active" aria-current="page">AI Dialogue</a><a href="library.html">Library</a>
+        <a href="community.html">Community</a><a href="certificate.html" class="nav-cta">Get Certificate</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <div class="page-hero" style="padding:40px 0 28px;">
+      <div class="container">
+        <p class="eyebrow" style="justify-content:center;color:var(--teal-deep);">💬 Anonymous &amp; Confidential</p>
+        <h1 style="font-size:clamp(1.8rem,3vw,2.6rem);">PeaceBridge AI Dialogue Assistant</h1>
+        <p>Tell your story — anonymously. The assistant listens, understands, and guides you toward peaceful resolution.
+        </p>
+      </div>
+    </div>
+
+    <div class="chat-layout">
+      <!-- CHAT WINDOW -->
+      <div>
+        <div class="chat-window" role="region" aria-label="Chat with PeaceBridge AI Assistant">
+          <div class="chat-header">
+            <div class="chat-avatar" aria-hidden="true">🕊️</div>
+            <div class="chat-header-info">
+              <h3>PeaceBridge AI Assistant</h3>
+              <small><span class="online-dot" aria-hidden="true"></span>Online · Anonymous · Confidential</small>
+            </div>
+            <button onclick="clearChat()"
+              style="margin-left:auto;background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 12px;border-radius:20px;font-size:.78rem;cursor:pointer;"
+              aria-label="Clear chat history">Clear</button>
+          </div>
+
+          <div class="chat-messages" id="chat-messages" role="log" aria-live="polite"
+            aria-label="Conversation messages">
+            <!-- Initial bot message injected by JS -->
+          </div>
+
+          <div class="chat-input-row">
+            <button class="mic-chat-btn" id="mic-chat-btn" aria-label="Speak your message"
+              title="Tap to speak">🎤</button>
+            <div class="chat-input-wrap">
+              <textarea class="chat-input" id="chat-input" placeholder="Tell me what's on your mind… (all anonymous)"
+                rows="1" aria-label="Type your message" maxlength="1000"></textarea>
+              <span class="char-count" id="char-count" aria-hidden="true">0/1000</span>
+            </div>
+            <button class="send-btn" onclick="sendMessage()" aria-label="Send message" title="Send">➤</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;font-size:.78rem;color:#8a99b2;text-align:center;">
+          🔒 Everything you type here is private and never leaves your device. · Powered by PeaceBridge dialogue engine.
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="chat-sidebar">
+        <div class="side-card">
+          <h4>How are you feeling?</h4>
+          <div class="mood-row" role="group" aria-label="Select your current mood">
+            <button class="mood-btn" onclick="sendQuickMsg('I am feeling angry about something')"
+              aria-label="Feeling angry">😠 Angry</button>
+            <button class="mood-btn" onclick="sendQuickMsg('I am feeling scared and unsafe')"
+              aria-label="Feeling scared">😨 Scared</button>
+            <button class="mood-btn" onclick="sendQuickMsg('I am feeling sad and hopeless')" aria-label="Feeling sad">😢
+              Sad</button>
+            <button class="mood-btn" onclick="sendQuickMsg('I am feeling confused and need guidance')"
+              aria-label="Feeling confused">😕 Confused</button>
+            <button class="mood-btn" onclick="sendQuickMsg('I want to report a case anonymously')"
+              aria-label="Want to report a case">📋 Report</button>
+            <button class="mood-btn" onclick="sendQuickMsg('I want to learn how to bring peace in my community')"
+              aria-label="Want peace guidance">🕊️ Peace</button>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h4>Quick Topics</h4>
+          <ul class="cmd-list" aria-label="Quick topic buttons">
+            <li><button onclick="sendQuickMsg('There is a land conflict in my community')">🌍 Land Conflict</button>
+            </li>
+            <li><button onclick="sendQuickMsg('There is election-related tension in my area')">🗳️ Election
+                Tension</button></li>
+            <li><button onclick="sendQuickMsg('I am experiencing domestic or family conflict')">🏠 Family
+                Conflict</button></li>
+            <li><button onclick="sendQuickMsg('There are cattle rustling or resource tensions in my region')">👥
+                Resource Tensions</button></li>
+            <li><button onclick="sendQuickMsg('I want to know about the peace library and books')">📚 Peace
+                Library</button></li>
+            <li><button onclick="sendQuickMsg('How do I get a PeaceBridge certificate?')">🏅 Certificate</button></li>
+          </ul>
+        </div>
+
+        <div class="side-card">
+          <h4>📊 This Session</h4>
+          <div class="session-stats">
+            <span>💬 Messages: <strong id="stat-msgs">0</strong></span>
+            <span>⏱️ Time: <strong id="stat-time">0:00</strong></span>
+          </div>
+        </div>
+
+        <div class="warning-emergency" role="alert">
+          <strong>⚠️ Immediate danger?</strong><br>
+          Kenya Police Service: <a href="tel:999">999</a> or <a href="tel:112">112</a><br>
+          Childline Kenya: <a href="tel:116">116</a><br>
+          GBV National Hotline: <a href="tel:1195">1195</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0;">
+        <span>© 2025–2026 PeaceBridge Initiative</span>
+        <span>🌿 Copyright @catsrovercrew.ug 🌿</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="to-top" aria-label="Back to top">↑</button>
+
+  <script src="app.js"></script>
+ !-- REMOVE: <script src="dialogue-engine.js"></script> -->
+<script>
+  const messagesEl = document.getElementById('chat-messages');
+  const inputEl = document.getElementById('chat-input');
+  const charCountEl = document.getElementById('char-count');
+  let history = [];
+  let msgCount = 0;
+  let startTime = Date.now();
+
+  // 1. EMBEDDED DYNAMIC DIALOGUE ENGINE ROUTER
+  const LocalDialogueEngine = {
+    getReply: function (text, history) {
+      const input = text.toLowerCase();
+
+      // Land Conflict
+      if (input.includes('land') || input.includes('shamba') || input.includes('boundary')) {
+        return {
+          reply: "Land disputes require careful structural mediation. It's vital to avoid direct confrontation. Have you engaged local elders, a Nyumba Kumi official, or the Area Chief to look at mapping boundaries before the tension escalates?",
+          action: { label: "File Formal Land Case", href: "report.html" }
+        };
+      }
+      // Election Tension
+      if (input.includes('election') || input.includes('political') || input.includes('kura') || input.includes('campaign')) {
+        return {
+          reply: "Political differences can strain community fabrics deeply. True leadership focuses on localized resilience. Are there neutral community spaces or youth peace groups in your ward working to de-escalate these discussions?",
+          action: { label: "Log Incident Safely", href: "report.html" }
+        };
+      }
+      // Domestic / Family Conflict
+      if (input.includes('domestic') || input.includes('family') || input.includes('nyumbani') || input.includes('home')) {
+        return {
+          reply: "Family disputes deserve a safe, supportive framework to reach common understanding. Please prioritize your physical safety. If this tension places anyone in harm's way, consider reaching out to a trusted counselor or using the local support networks.",
+          urgent: true
+        };
+      }
+      // Resource Tensions / Cattle Rustling
+      if (input.includes('cattle') || input.includes('resource') || input.includes('water') || input.includes('grazing')) {
+        return {
+          reply: "Shared resources like water and grazing pastures are critical to community survival. When shortages cause friction, joint resource management committees are the best step forward. Is your local administration actively mediating this?",
+          action: { label: "Escalate Resource Log", href: "report.html" }
+        };
+      }
+      // Angry / Scared Moods
+      if (input.includes('angry') || input.includes('scared') || input.includes('unsafe')) {
+        return {
+          reply: "It is completely normal to feel this way when facing community friction. Take a step back from the physical location of the argument if possible. Let's document the details calmly and anonymously.",
+          urgent: input.includes('unsafe')
+        };
+      }
+      // Peace Library
+      if (input.includes('library') || input.includes('books') || input.includes('learn')) {
+        return {
+          reply: "Knowledge builds stable communities! Our Peace Library contains excellent toolkits on localized mediation, civic rights, and community organizing strategies.",
+          action: { label: "Explore Library", href: "library.html" }
+        };
+      }
+      // Certificate
+      if (input.includes('certificate') || input.includes('badge')) {
+        return {
+          reply: "You can earn your PeaceBridge Advocacy Certificate by completing our brief community dialogue review course. It shows your dedication to constructive conflict resolution.",
+          action: { label: "Start Course", href: "certificate.html" }
+        };
+      }
+
+      // Generic Fallback (Dynamic based on length)
+      if (text.length < 15) {
+        return { reply: "Asante for sharing. Could you expand a bit more on what is happening? Giving me more context helps me suggest better paths to a peaceful resolution." };
+      }
+
+      return { reply: "I have analyzed your statement carefully. In moments of community tension, the first goal is stopping further escalation. Engaging community elders or a neutral third party is typically the most reliable way to establish dialogue safely." };
+    }
+  };
+
+  // Mobile Navigation Hamburger Menu Switch Fix
+  (function () {
+    const toggle = document.getElementById('nav-toggle-btn');
+    const links = document.getElementById('nav-links');
+    if (toggle && links) {
+      toggle.addEventListener('click', function () {
+        const open = links.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+    }
+  })();
+
+  // Session timer
+  setInterval(() => {
+    const s = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById('stat-time').textContent = Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + s % 60;
+  }, 1000);
+
+  function addMsg(role, text, extra) {
+    const isBot = role === 'bot';
+    const wrap = document.createElement('div');
+    wrap.className = 'msg ' + (isBot ? 'bot' : 'user') + (extra && extra.urgent ? ' urgent' : '');
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    wrap.innerHTML = `
+        <div class="msg-avatar ${isBot ? 'bot-av' : 'user-av'}" aria-hidden="true">${isBot ? '🕊️' : '👤'}</div>
+        <div>
+          <div class="msg-bubble">${text}</div>
+          ${extra && extra.action ? `<button class="msg-action-btn" onclick="window.location='${extra.action.href}'">${extra.action.label} →</button>` : ''}
+          <div class="msg-time" aria-hidden="true">${time}</div>
+        </div>
+      `;
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    msgCount++;
+    document.getElementById('stat-msgs').textContent = msgCount;
+  }
+
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'msg bot typing-indicator'; el.id = 'typing';
+    el.innerHTML = '<div class="msg-avatar bot-av" aria-hidden="true">🕊️</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
+    messagesEl.appendChild(el); messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  function hideTyping() { const el = document.getElementById('typing'); if (el) el.remove(); }
+
+  function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    addMsg('user', escapeHtml(text));
+    history.push({ role: 'user', content: text });
+    inputEl.value = ''; charCountEl.textContent = '0/1000'; inputEl.style.height = 'auto';
+    showTyping();
+
+    setTimeout(() => {
+      hideTyping();
+
+      // Run our dynamic local routing engine directly
+      const result = LocalDialogueEngine.getReply(text, history);
+
+      addMsg('bot', result.reply, result);
+      history.push({ role: 'bot', content: result.reply });
+
+      if (window.PB && window.PB.store) {
+        window.PB.store.set('total_chats', (window.PB.store.get('total_chats', 0) || 0) + 1);
+      }
+    }, 600 + Math.random() * 500);
+  }
+
+  function sendQuickMsg(text) { inputEl.value = text; sendMessage(); }
+
+  function clearChat() {
+    if (!confirm('Clear this conversation?')) return;
+    messagesEl.innerHTML = ''; history = []; msgCount = 0;
+    document.getElementById('stat-msgs').textContent = '0';
+    startGreeting();
+  }
+
+  function startGreeting() {
+    setTimeout(() => {
+      addMsg('bot', 'Habari! Welcome to the PeaceBridge Dialogue Assistant. 🕊️<br><br>This is a <strong>completely safe, anonymous space</strong> where you can share what is happening in your area — whether it is local land friction, political disagreements, family tension, or regional resource disputes.<br><br>I am here to listen objectively and suggest peaceful pathways forward. <strong>How can I support you or your community today?</strong>');
+    }, 400);
+  }
+
+  function escapeHtml(text) { return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // Input listeners
+  inputEl.addEventListener('input', function () {
+    charCountEl.textContent = this.value.length + '/1000';
+    this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+  });
+  inputEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  // Mic input initialization fallback
+  document.addEventListener('DOMContentLoaded', function () {
+    if (window.PB && typeof window.PB.attachMic === 'function') {
+      window.PB.attachMic(document.getElementById('mic-chat-btn'), inputEl, function (text) {
+        if (text.trim()) setTimeout(sendMessage, 300);
+      });
+    }
+    startGreeting();
+  });
+</script>
+</body>
+
+</html>

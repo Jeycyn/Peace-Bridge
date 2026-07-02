@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PeaceBridge Peace Library — six books and videos about dialogue and peaceful conflict resolution. Complete them to earn your certificate.">
+<title>Peace Library — PeaceBridge Initiative</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/icon.jpeg">
+<link rel="stylesheet" href="style.css">
+<style>
+/* Progress bar at top */
+.lib-progress-bar{ background:var(--paper-dim); border-radius:var(--radius); padding:24px 28px; margin-bottom:40px; border:1px solid var(--paper-line); }
+.lib-progress-bar h3{ margin:0 0 10px; font-size:1rem; }
+.bar-track{ background:var(--paper-line); border-radius:10px; height:12px; overflow:hidden; }
+.bar-fill{ height:100%; border-radius:10px; background:linear-gradient(90deg,var(--green),var(--teal)); transition:width .5s ease; }
+.prog-nums{ display:flex; justify-content:space-between; margin-top:7px; font-size:.8rem; color:#7a8da6; }
+
+/* Book grid */
+.books-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; }
+@media(max-width:900px){ .books-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .books-grid{ grid-template-columns:1fr; } }
+
+.book-card{
+  background:#fff; border:1px solid var(--paper-line); border-radius:var(--radius);
+  overflow:hidden; transition:transform .2s, box-shadow .2s;
+  display:flex; flex-direction:column;
+}
+.book-card:hover{ transform:translateY(-5px); box-shadow:0 16px 32px var(--shadow-c); }
+.book-cover{
+  height:180px; display:flex; align-items:center; justify-content:center;
+  font-size:5rem; position:relative;
+}
+.book-card.read .book-cover::after{
+  content:'✓ Read'; position:absolute; top:10px; right:10px;
+  background:var(--green); color:#fff; font-family:var(--font-mono); font-size:.68rem;
+  letter-spacing:.06em; padding:4px 10px; border-radius:20px; font-weight:700;
+}
+.book-body{ padding:20px; flex:1; display:flex; flex-direction:column; }
+.book-body h3{ font-size:1.05rem; margin-bottom:5px; }
+.book-author{ font-size:.8rem; color:#8a99b2; margin-bottom:10px; font-style:italic; }
+.book-body p{ font-size:.87rem; color:#566479; flex:1; }
+.book-actions{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+.book-actions .btn{ padding:8px 14px; font-size:.8rem; border-radius:20px; }
+
+/* Modal overlay */
+.modal-overlay{
+  display:none; position:fixed; inset:0; background:rgba(22,33,58,.6); z-index:2000;
+  align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.open{ display:flex; }
+.modal{
+  background:#fff; border-radius:var(--radius); max-width:640px; width:100%;
+  max-height:85vh; overflow-y:auto; padding:34px; position:relative;
+  box-shadow:0 24px 64px rgba(0,0,0,.3);
+}
+.modal-close{
+  position:absolute; top:14px; right:16px; background:none; border:none;
+  font-size:1.4rem; cursor:pointer; color:#8a99b2;
+}
+.modal h2{ font-size:1.4rem; margin-bottom:6px; }
+.modal .byline{ font-style:italic; color:#8a99b2; font-size:.88rem; margin-bottom:18px; }
+.modal .chapter{ background:var(--paper-dim); border-radius:10px; padding:18px; margin-bottom:14px; font-size:.92rem; line-height:1.7; }
+.modal .chapter h4{ margin:0 0 10px; color:var(--navy); }
+.read-confirm{ background:linear-gradient(135deg,#E8F3E6,#D2EAD0); border-radius:10px; padding:16px 20px; margin-top:20px; }
+.read-confirm p{ font-size:.88rem; color:var(--green-deep); margin:0 0 12px; font-weight:600; }
+
+/* Videos section */
+.videos-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+@media(max-width:860px){ .videos-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:520px){ .videos-grid{ grid-template-columns:1fr; } }
+.video-card{
+  background:#fff; border:1px solid var(--paper-line); border-radius:var(--radius); overflow:hidden;
+  transition:transform .2s, box-shadow .2s;
+}
+.video-card:hover{ transform:translateY(-4px); box-shadow:0 12px 24px var(--shadow-c); }
+.video-thumb{
+  background:linear-gradient(135deg,var(--navy),#234876);
+  height:140px; display:flex; align-items:center; justify-content:center; position:relative; cursor:pointer;
+}
+.play-btn{
+  width:52px; height:52px; border-radius:50%; background:rgba(255,255,255,.9);
+  display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+  box-shadow:0 4px 16px rgba(0,0,0,.3); transition:transform .15s;
+}
+.video-thumb:hover .play-btn{ transform:scale(1.1); }
+.video-tag{ position:absolute; top:10px; left:10px; font-size:.65rem; font-family:var(--font-mono); letter-spacing:.06em; background:var(--gold); color:var(--navy-ink); padding:3px 10px; border-radius:20px; font-weight:700; }
+.video-body{ padding:14px 16px; }
+.video-body h4{ font-size:.95rem; margin-bottom:5px; }
+.video-body .dur{ font-size:.75rem; color:#8a99b2; font-family:var(--font-mono); }
+.video-card.watched .video-thumb::after{ content:'✓ Watched'; position:absolute; top:10px; right:10px; background:var(--green); color:#fff; font-family:var(--font-mono); font-size:.65rem; padding:3px 10px; border-radius:20px; font-weight:700; }
+
+/* Cert unlock banner */
+.cert-unlock-banner{
+  background:linear-gradient(135deg,#D9A53D,#B9842A); color:#fff;
+  border-radius:var(--radius); padding:28px 32px; text-align:center; margin-top:40px;
+  display:none;
+}
+.cert-unlock-banner.show{ display:block; animation: fadeInUp .5s ease; }
+@keyframes fadeInUp{ from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+.cert-unlock-banner h2{ color:#fff; font-size:1.6rem; margin-bottom:8px; }
+.cert-unlock-banner p{ opacity:.9; margin-bottom:18px; }
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="a11y-bar" role="toolbar" aria-label="Accessibility tools">
+  <div class="container">
+    <span class="a11y-label">Accessibility:</span>
+    <button class="a11y-btn" data-action="font-size"><span class="a11y-size-label">A</span> Text Size</button>
+    <button class="a11y-btn" data-action="contrast" aria-pressed="false">◑ Contrast</button>
+    <button class="a11y-btn" data-action="dyslexic" aria-pressed="false">𝖠 Easy Read</button>
+    <button class="a11y-btn" data-action="read-page" aria-pressed="false">🔊 <span class="a11y-label-text">Read page</span></button>
+    <button class="a11y-btn" data-action="voice-nav">🎤 <span><span class="dot"></span></span> Voice Nav</button>
+  </div>
+</div>
+
+<header class="site-header" role="banner">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="index.html"><img src="/icon.jpeg" alt="PeaceBridge" width="46" height="46"><div class="brand-text">PeaceBridge<small>Initiative</small></div></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html">Home</a><a href="about.html">About</a><a href="report.html">Report a Case</a>
+      <a href="dialogue.html">AI Dialogue</a><a href="library.html" class="active" aria-current="page">Library</a>
+      <a href="community.html">Community</a><a href="certificate.html" class="nav-cta">Get Certificate</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main-content">
+  <div class="page-hero">
+    <div class="container">
+      <p class="eyebrow" style="justify-content:center;color:var(--green-deep);">📚 Knowledge is Power</p>
+      <h1>PeaceBridge Peace Library</h1>
+      <p>Six books and curated videos about dialogue, reconciliation, and peaceful conflict resolution. Complete all to earn your certificate.</p>
+    </div>
+  </div>
+
+  <section style="padding:48px 0 80px;">
+    <div class="container">
+
+      <!-- Progress bar -->
+      <div class="lib-progress-bar reveal" role="region" aria-label="Your reading progress">
+        <h3>📊 Your Progress</h3>
+        <div class="bar-track"><div class="bar-fill" id="progress-bar" style="width:0%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Reading progress"></div></div>
+        <div class="prog-nums">
+          <span id="prog-label">0 of 6 books read · 0 of 5 videos watched</span>
+          <span id="prog-pct">0%</span>
+        </div>
+      </div>
+
+      <!-- BOOKS -->
+      <div id="books" aria-label="Peace books section">
+        <div class="section-head reveal" style="text-align:left;max-width:100%;">
+          <p class="eyebrow" style="color:var(--green-deep);">📖 Books</p>
+          <h2>Six Novels &amp; Guides on Dialogue and Peace</h2>
+        </div>
+        <div class="books-grid stagger" id="books-grid"></div>
+      </div>
+
+      <hr class="div" style="margin:60px 0 50px;">
+
+      <!-- VIDEOS -->
+      <div id="videos" aria-label="Peace videos section">
+        <div class="section-head reveal" style="text-align:left;max-width:100%;">
+          <p class="eyebrow" style="color:var(--teal-deep);">🎬 Videos</p>
+          <h2>Documentary &amp; Educational Videos</h2>
+          <p style="color:#4b5a72;">Watch these videos as part of your journey. Even cartoon illustrations count — peace education meets everyone where they are.</p>
+        </div>
+        <div class="videos-grid stagger" id="videos-grid"></div>
+      </div>
+
+      <!-- Certificate unlock -->
+      <div class="cert-unlock-banner" id="cert-banner" role="alert" aria-live="polite">
+        <div style="font-size:3rem;margin-bottom:10px;" aria-hidden="true">🏅</div>
+        <h2>You've Completed the Library!</h2>
+        <p>Congratulations! You have read all six books and watched the videos. Your PeaceBridge Certificate is ready to be generated.</p>
+        <a href="certificate.html" class="btn btn-primary btn-lg">🎓 Get My Certificate Now →</a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<!-- Book Modal -->
+<div class="modal-overlay" id="book-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close book">✕</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- Video Modal -->
+<div class="modal-overlay" id="video-modal" role="dialog" aria-modal="true" aria-labelledby="vmodal-title" onclick="if(event.target===this)closeVideoModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeVideoModal()" aria-label="Close video">✕</button>
+    <div id="vmodal-content"></div>
+  </div>
+</div>
+
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <span>© 2025–2026 PeaceBridge Initiative</span>
+      <span>🌿 Copyright @catsrovercrew.ug 🌿</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="Back to top">↑</button>
+<script src="app.js"></script>
+<script>
+const BOOKS = [
+  {
+    id:'b1', emoji:'📖', color:'#E8EEF8', title:'The Art of Peace',
+    author:'Compiled by John Stevens', genre:'Philosophy & Dialogue',
+    summary:'A timeless guide drawn from the wisdom of Morihei Ueshiba — founder of Aikido — turned into a philosophy of peaceful living and conflict transformation. Short, powerful passages that community leaders and young people can read in a single sitting.',
+    chapters:[
+      {title:'Chapter 1 — The Path Begins', text:'Peace is not achieved through force, but through understanding. When we look at our opponent and see a human being with their own fears and hopes, the conflict changes its shape entirely. We no longer fight an enemy; we try to heal a shared wound.'},
+      {title:'Chapter 2 — Words as Weapons or Bridges', text:'Before you speak in anger, ask: will these words build or burn? A harsh word said in one second can take ten years of friendship to repair. But a word spoken with genuine understanding can end a conflict that lasted a generation.'},
+      {title:'Chapter 3 — The Strength in Stepping Back', text:'True courage is not the willingness to fight — it is the willingness to listen when everything in you wants to shout. Communities that find peace have usually found one person who chose to listen first.'},
+    ]
+  },
+  {
+    id:'b2', emoji:'🕊️', color:'#E5F4F7', title:'Voices Across the River',
+    author:'A PeaceBridge Original Story', genre:'African Fiction',
+    summary:'Set in a fictional Ugandan community divided by a river and a long-standing land dispute. Two young people — one from each side — begin exchanging messages and discover their families share more history than hate. A story about how dialogue begins.',
+    chapters:[
+      {title:'Part 1 — The Divided Village', text:'The river had always been there. But the line people drew across it was newer — only twenty years old, drawn in the ink of an old court paper that nobody had ever truly accepted. Amara stood on her side and looked across at the smoke from the other family\'s cook-fire. She had never spoken to anyone over there. Her mother said she never should.'},
+      {title:'Part 2 — The First Letter', text:'"My name is Okello," the note said. It had been tied to a stone and thrown across the river. Amara nearly didn\'t pick it up. But curiosity is a powerful thing. She wrote back: "My name is Amara. Why are you writing to me?" From that day, everything slowly began to change.'},
+      {title:'Part 3 — What the Elders Never Said', text:'When the two young people finally met — face to face, at the bridge that nobody used — they discovered something the elders had never told them. Their grandfathers had been friends. The dispute was never about hatred; it was about a boundary mark that had shifted in a flood, and pride that had grown too large to admit a mistake.'},
+    ]
+  },
+  {
+    id:'b3', emoji:'🤝', color:'#E8F3E6', title:'Ubuntu: We Are Together',
+    author:'Desmond Tutu (adapted excerpts)', genre:'African Philosophy',
+    summary:'"Ubuntu" — I am because we are. Archbishop Tutu\'s philosophy of shared humanity is adapted here for community peacebuilders. It argues that no person can be truly well while their neighbor suffers, and that healing must be communal, not individual.',
+    chapters:[
+      {title:'Chapter 1 — I Am Because We Are', text:'Ubuntu is not just a word — it is a way of seeing the world. It says: my humanity is bound up in yours. When you are diminished, when you are hurt, when you are humiliated — something in me is diminished too. We cannot build walls and call ourselves healthy.'},
+      {title:'Chapter 2 — The Truth and Reconciliation Model', text:'After South Africa\'s darkest years, communities did not choose revenge — they chose to sit together in halls and speak the truth aloud. Perpetrators confessed. Victims spoke. The whole country witnessed. It was not comfortable. But it began to heal what decades of courts and prisons could not.'},
+      {title:'Chapter 3 — Forgiveness Is Not Weakness', text:'People often confuse forgiveness with forgetting, or with saying the wrong was acceptable. It is neither. Forgiveness is choosing not to carry the weight of another person\'s wrong inside your own body. It is something you do for yourself — so you can walk without that burden.'},
+    ]
+  },
+  {
+    id:'b4', emoji:'🌿', color:'#F5F0E8', title:'Roots of Reconciliation',
+    author:'John Paul Lederach', genre:'Conflict Resolution',
+    summary:'Lederach\'s landmark framework for community reconciliation — simplified and contextualized for East African communities. Argues that sustainable peace must happen at grassroots level, not just at the leadership table.',
+    chapters:[
+      {title:'Chapter 1 — Peace at the Grassroots', text:'International agreements rarely filter down to the village. The farmer who lost livestock, the woman whose home was burned, the young man who was beaten — they do not attend summits. Peace must be built where they live, by the people around them.'},
+      {title:'Chapter 2 — The Cycle of Violence and How to Break It', text:'Violence is almost always a cycle: an act produces hurt, hurt produces anger, anger produces retaliation, retaliation produces more hurt. Breaking this cycle requires someone to choose not to retaliate. That person is rarely celebrated in the moment. But they are always the one history thanks.'},
+      {title:'Chapter 3 — Building Platforms for Dialogue', text:'Every village already has the infrastructure for peace: the community hall, the church or mosque, the women\'s group, the market. The question is whether leaders are willing to use these spaces for honest, structured conversation between the sides of a conflict.'},
+    ]
+  },
+  {
+    id:'b5', emoji:'💬', color:'#EDE8F5', title:'Words That Heal',
+    author:'Dr. Harriet Kimani', genre:'Communication & Peace',
+    summary:'A practical guide written for community health workers, teachers, and local leaders in East Africa. Explains how to have hard conversations without escalating them — with specific scripts, scenarios, and examples drawn from real cases.',
+    chapters:[
+      {title:'Chapter 1 — The Language of De-escalation', text:'There are certain phrases that consistently reduce conflict: "Help me understand your side." "I hear that this has been painful for you." "What would make this feel fair?" These are not magic words, but they signal to the other person that you are not a threat — and that opens the door.'},
+      {title:'Chapter 2 — When Emotions Are Running High', text:'The brain under extreme stress cannot process nuance. When someone is flooded with fear or rage, they cannot hear complex arguments — only basic signals of safety or threat. De-escalation means first reducing the threat signals: lower your voice, create physical space, speak slowly.'},
+      {title:'Chapter 3 — Mediation Basics for Community Leaders', text:'A good mediator does three things: ensures both parties feel equally heard, separates the people from the problem, and focuses the conversation on interests rather than positions. "I want the land" is a position. "I need to feed my family" is an interest. Interests can almost always be negotiated.'},
+    ]
+  },
+  {
+    id:'b6', emoji:'🌅', color:'#FEF6E8', title:'After the Storm',
+    author:'A PeaceBridge Original Story', genre:'Post-Conflict Fiction',
+    summary:'The story of a community picking itself up after election violence. Told from five different perspectives — a winner, a loser, a mother who lost her son, a youth who participated in violence and regrets it, and a local teacher who refused to take sides. A story of how communities find their way back.',
+    chapters:[
+      {title:'Perspective 1 — The Winner', text:'"I won. I should feel good. But the streets were quiet in a way that felt wrong. Half the village hadn\'t come to the celebration. I looked at the faces of those who did, and I realized: this was not what victory was supposed to look like. My uncle had thrown a stone at our neighbor\'s roof. That stone was thrown in my name. How do I live with that?"'},
+      {title:'Perspective 3 — The Teacher', text:'"They came to me from both sides, on different days, and each asked me if I agreed with them. I told them the same thing both times: I am not here to agree with anyone. I am here to help you think clearly. My classroom has children from every family involved in this conflict. I refuse to let their parents\' choices define what happens inside these walls."'},
+      {title:'Perspective 5 — The Youth Who Regrets', text:'"We thought it was about justice. We told ourselves we were defending our community. But when it was over and I looked at what we had done — the broken things, the hurt people — I could not pretend anymore. I was seventeen. I thought power meant force. It took me two years to understand that I had chosen the easier option, not the braver one."'},
+    ]
+  }
+];
+
+const VIDEOS = [
+  { id:'v1', title:'What is Peacebuilding?', tag:'Education', dur:'8 min', emoji:'🎓', color:'#1B3358', desc:'An animated introduction to the core concepts of peacebuilding — conflict transformation, dialogue, mediation — designed for young people and first-time learners.' },
+  { id:'v2', title:'The Power of Listening', tag:'Skill', dur:'12 min', emoji:'👂', color:'#3F7D3F', desc:'A documentary about how communities in post-conflict regions transformed their relationships through active, structured listening. Real stories from Uganda, Rwanda and Kenya.' },
+  { id:'v3', title:'Peace Cartoon: The Two Villages', tag:'Cartoon', dur:'6 min', emoji:'🎨', color:'#D9A53D', desc:'An animated cartoon story showing two villages that chose dialogue over a water dispute. Perfect for children and community education sessions. Subtitled in English.' },
+  { id:'v4', title:'Elections Without Violence', tag:'Civic', dur:'15 min', emoji:'🗳️', color:'#2E8C9E', desc:'A civic education video explaining citizens\' rights, the voting process, how to report election irregularities, and how communities have managed post-election tensions peacefully.' },
+  { id:'v5', title:'Women as Peacemakers', tag:'Documentary', dur:'18 min', emoji:'👩', color:'#8B4F9E', desc:'A powerful documentary profiling women across East Africa who have led peace processes in their communities — often without being asked to, and often despite being the most affected by conflict.' },
+];
+
+let booksRead = PB.store.get('books_read',[]);
+let videosWatched = PB.store.get('videos_watched',[]);
+
+function renderBooks(){
+  const grid = document.getElementById('books-grid');
+  grid.innerHTML = BOOKS.map(b=>{
+    const isRead = booksRead.includes(b.id);
+    return `
+    <div class="book-card ${isRead?'read':''} reveal" id="book-${b.id}">
+      <div class="book-cover" style="background:${b.color};" aria-hidden="true">${b.emoji}</div>
+      <div class="book-body">
+        <div class="pill pill-green" style="margin-bottom:10px;">${b.genre}</div>
+        <h3>${b.title}</h3>
+        <div class="book-author">by ${b.author}</div>
+        <p>${b.summary}</p>
+        <div class="book-actions">
+          <button class="btn btn-primary" onclick="openBook('${b.id}')" aria-label="Read ${b.title}">📖 Read</button>
+          <button class="btn btn-outline" data-speak-target="#book-${b.id}" aria-label="Listen to summary of ${b.title}">🔊 Listen</button>
+          ${isRead ? '<span class="pill pill-green" style="align-self:center;">✓ Complete</span>' : `<button class="btn btn-outline" onclick="markRead('${b.id}')" aria-label="Mark ${b.title} as read">Mark Read</button>`}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderVideos(){
+  const grid = document.getElementById('videos-grid');
+  grid.innerHTML = VIDEOS.map(v=>{
+    const isWatched = videosWatched.includes(v.id);
+    return `
+    <div class="video-card ${isWatched?'watched':''} reveal" id="vid-${v.id}">
+      <div class="video-thumb" style="background:linear-gradient(135deg,${v.color},${v.color}aa);" onclick="openVideo('${v.id}')" role="button" tabindex="0" aria-label="Play video: ${v.title}" onkeydown="if(event.key==='Enter')openVideo('${v.id}')">
+        <span class="video-tag">${v.tag}</span>
+        <div class="play-btn" aria-hidden="true">${v.emoji}</div>
+      </div>
+      <div class="video-body">
+        <h4>${v.title}</h4>
+        <div class="dur">⏱ ${v.dur}</div>
+        <p style="font-size:.82rem;color:#566479;margin-top:8px;">${v.desc}</p>
+        <button class="btn btn-outline" style="margin-top:12px;padding:7px 14px;font-size:.8rem;" onclick="markWatched('${v.id}')" ${isWatched?'disabled':''}>
+          ${isWatched ? '✓ Watched' : 'Mark as Watched'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateProgress(){
+  const total = BOOKS.length + VIDEOS.length;
+  const done = booksRead.length + videosWatched.length;
+  const pct = Math.round((done/total)*100);
+  const bar = document.getElementById('progress-bar');
+  bar.style.width = pct+'%';
+  bar.setAttribute('aria-valuenow', pct);
+  document.getElementById('prog-label').textContent = `${booksRead.length} of ${BOOKS.length} books read · ${videosWatched.length} of ${VIDEOS.length} videos watched`;
+  document.getElementById('prog-pct').textContent = pct+'%';
+  const allDone = booksRead.length >= BOOKS.length && videosWatched.length >= VIDEOS.length;
+  document.getElementById('cert-banner').classList.toggle('show', allDone);
+  if(allDone){ PB.store.set('library_complete', true); PB.announce('Congratulations! You have completed the library. Your certificate is ready!'); }
+}
+
+function markRead(id){
+  if(!booksRead.includes(id)){ booksRead.push(id); PB.store.set('books_read', booksRead); }
+  renderBooks(); updateProgress();
+  PB.announce('Book marked as read. Great work!');
+}
+
+function markWatched(id){
+  if(!videosWatched.includes(id)){ videosWatched.push(id); PB.store.set('videos_watched', videosWatched); }
+  renderVideos(); updateProgress();
+  PB.announce('Video marked as watched. Keep going!');
+}
+
+function openBook(id){
+  const b = BOOKS.find(x=>x.id===id);
+  if(!b) return;
+  document.getElementById('modal-content').innerHTML = `
+    <div style="font-size:3rem;margin-bottom:12px;" aria-hidden="true">${b.emoji}</div>
+    <div class="pill pill-green" style="margin-bottom:12px;">${b.genre}</div>
+    <h2 id="modal-title">${b.title}</h2>
+    <div class="byline">by ${b.author}</div>
+    <p style="color:#566479;margin-bottom:22px;">${b.summary}</p>
+    ${b.chapters.map(c=>`<div class="chapter"><h4>${c.title}</h4><p>${c.text}</p></div>`).join('')}
+    <div class="read-confirm">
+      <p>Have you read this book?</p>
+      <button class="btn btn-green" onclick="markRead('${b.id}');closeModal()">✅ Mark as Read &amp; Continue</button>
+    </div>
+  `;
+  document.getElementById('book-modal').classList.add('open');
+  document.querySelector('#book-modal .modal-close').focus();
+}
+
+function openVideo(id){
+  const v = VIDEOS.find(x=>x.id===id);
+  if(!v) return;
+  // For illustration: show an embedded YouTube search (educational, no copyrighted content)
+  const searchTerms = encodeURIComponent(v.title + ' peace documentary');
+  document.getElementById('vmodal-content').innerHTML = `
+    <h2 id="vmodal-title">${v.emoji} ${v.title}</h2>
+    <p class="byline">⏱ Duration: ${v.dur} · Category: ${v.tag}</p>
+    <p style="color:#566479;margin-bottom:18px;">${v.desc}</p>
+    <div style="background:var(--paper-dim);border-radius:12px;padding:24px;text-align:center;margin-bottom:18px;">
+      <div style="font-size:3rem;margin-bottom:12px;">${v.emoji}</div>
+      <p style="font-size:.9rem;color:#566479;">This is an educational illustration video.<br>In a connected environment, this would play the full video.</p>
+      <a href="https://www.youtube.com/results?search_query=${searchTerms}" target="_blank" rel="noopener noreferrer" class="btn btn-teal" style="margin-top:12px;">🔍 Find this video on YouTube →</a>
+    </div>
+    <div style="background:linear-gradient(135deg,#E8F3E6,#D2EAD0);border-radius:10px;padding:16px 20px;">
+      <p style="font-size:.88rem;color:var(--green-deep);font-weight:600;margin:0 0 12px;">Have you watched this video?</p>
+      <button class="btn btn-green" onclick="markWatched('${v.id}');closeVideoModal()">✅ Mark as Watched</button>
+    </div>
+  `;
+  document.getElementById('video-modal').classList.add('open');
+  document.querySelector('#video-modal .modal-close').focus();
+}
+
+function closeModal(){ document.getElementById('book-modal').classList.remove('open'); }
+function closeVideoModal(){ document.getElementById('video-modal').classList.remove('open'); }
+
+// Close modal on Escape
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeModal(); closeVideoModal(); } });
+
+document.addEventListener('DOMContentLoaded', function(){
+  renderBooks(); renderVideos(); updateProgress();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="About PeaceBridge Initiative — our mission, values, and commitment to empowering young people through dialogue.">
+  <title>About Us — PeaceBridge Initiative</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="icon.jpeg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Mission Box Layout */
+    .mission-box {
+      background: linear-gradient(135deg, var(--navy), #234876);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 50px;
+      text-align: center;
+    }
+
+    .mission-box h2 {
+      color: #fff;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+    }
+
+    .mission-box .theme {
+      color: var(--gold);
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      margin: 16px 0;
+    }
+
+    .mission-box p {
+      color: #c9d3e3;
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 1.05rem;
+    }
+
+    /* Core Values Grid */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    @media(max-width:760px) {
+      .values-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:460px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .value-card {
+      background: #fff;
+      border: 1px solid var(--paper-line);
+      border-radius: var(--radius);
+      padding: 26px;
+    }
+
+    .value-card .icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .value-card h4 {
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .value-card p {
+      font-size: .88rem;
+      color: #566479;
+      margin: 0;
+    }
+
+    /* Sign Pledge System */
+    .pledge-card {
+      background: linear-gradient(135deg, #FDF3DC, #F7E4B0);
+      border: 2px solid rgba(217, 165, 61, .3);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .pledge-card h2 {
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    .pledge-text {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0 auto 24px;
+      color: #3a3a3a;
+      line-height: 1.7;
+    }
+
+    .pledge-input {
+      display: flex;
+      gap: 10px;
+      max-width: 420px;
+      margin: 0 auto 14px;
+    }
+
+    .pledge-input input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid rgba(217, 165, 61, .5);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: .95rem;
+    }
+
+    .pledge-names {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 14px;
+    }
+
+    .pledge-name-pill {
+      background: rgba(27, 51, 88, .08);
+      color: var(--navy);
+      padding: 5px 13px;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 600;
+      animation: msgIn .3s ease forward;
+    }
+
+    /* Interactive Timeline Layout */
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--paper-line);
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .tl-dot {
+      position: absolute;
+      left: -32px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--navy);
+      border: 3px solid var(--paper);
+    }
+
+    .tl-item.green .tl-dot {
+      background: var(--green);
+    }
+
+    .tl-item.gold .tl-dot {
+      background: var(--gold);
+    }
+
+    .tl-item.teal .tl-dot {
+      background: var(--teal);
+    }
+
+    .tl-year {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .08em;
+      color: #8a99b2;
+      margin-bottom: 4px;
+    }
+
+    .tl-title {
+      font-weight: 700;
+      font-size: .98rem;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .tl-desc {
+      font-size: .88rem;
+      color: #566479;
+    }
+
+    /* Robust Scroll-Reveal Fail-safes */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s cubic-bezier(0.215, 0.610, 0.355, 1), transform 0.6s cubic-bezier(0.215, 0.610, 0.355, 1);
+      will-change: transform, opacity;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger>.reveal {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .stagger>.reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes msgIn {
+      from {
+        opacity: 0;
+        transform: scale(.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="a11y-bar" role="toolbar" aria-label="Accessibility tools">
+    <div class="container">
+      <span class="a11y-label">Accessibility:</span>
+      <button class="a11y-btn" data-action="font-size"><span class="a11y-size-label">A</span> Text Size</button>
+      <button class="a11y-btn" data-action="contrast" aria-pressed="false">◑ Contrast</button>
+      <button class="a11y-btn" data-action="dyslexic" aria-pressed="false">𝖠 Easy Read</button>
+      <button class="a11y-btn" data-action="read-page" aria-pressed="false">🔊 <span class="a11y-label-text">Read
+          page</span></button>
+      <button class="a11y-btn" data-action="voice-nav">🎤 <span><span class="dot"></span></span> Voice Nav</button>
+    </div>
+  </div>
+
+  <header class="site-header" role="banner">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="index.html"><img src="icon.jpeg" alt="PeaceBridge" width="46" height="46">
+        <div class="brand-text">PeaceBridge<small>Initiative</small></div>
+      </a>
+      <button class="nav-toggle" id="nav-toggle-btn" aria-expanded="false" aria-controls="nav-links"
+        aria-label="Open menu"><span></span><span></span><span></span></button>
+      <div class="nav-links" id="nav-links">
+        <a href="index.html">Home</a><a href="about.html" class="active" aria-current="page">About</a><a
+          href="report.html">Report a Case</a>
+        <a href="dialogue.html">AI Dialogue</a><a href="library.html">Library</a>
+        <a href="community.html">Community</a><a href="certificate.html" class="nav-cta">Get Certificate</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+    <div class="page-hero">
+      <div class="container">
+        <p class="eyebrow" style="justify-content:center;color:var(--green-deep);">🕊️ Who We Are</p>
+        <h1>About PeaceBridge Initiative</h1>
+        <p>A community-driven movement to build peace through dialogue, education, and inclusion across Kenya.</p>
+      </div>
+    </div>
+
+    <section style="padding:60px 0;">
+      <div class="container">
+        <div class="mission-box reveal" id="mission">
+          <div style="font-size:3.5rem;margin-bottom:16px;" aria-hidden="true">🕊️</div>
+          <p class="eyebrow" style="justify-content:center;color:var(--gold);margin-bottom:12px;">Our Mission</p>
+          <h2>Voices United for Peace and Progress</h2>
+          <p class="theme">2026 Theme: "Empowering Young People Through Dialogue and Peaceful Communities"</p>
+          <p>PeaceBridge Initiative believes that every community in Kenya has the capacity for peace. Our work is to
+            give communities the tools, platform, and knowledge they need to transform conflicts into conversations —
+            and conversations into lasting change. We exist for society. We exist for communities. We exist especially
+            for those who have never had a platform before.</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:20px 0 70px;">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow" style="justify-content:center;color:var(--green-deep);">Our Core Values</p>
+          <h2>What We Believe</h2>
+        </div>
+        <div class="values-grid stagger">
+          <div class="value-card reveal">
+            <div class="icon">🔒</div>
+            <h4>Anonymity</h4>
+            <p>We protect the identity of every person who comes to us. Fear of retaliation should never stop someone
+              from seeking peace.</p>
+          </div>
+          <div class="value-card reveal">
+            <div class="icon">👂</div>
+            <h4>Active Listening</h4>
+            <p>Before solutions come understanding. We create spaces where every voice — especially the quietest — is
+              genuinely heard.</p>
+          </div>
+          <div class="value-card reveal">
+            <div class="icon">🌍</div>
+            <h4>Inclusion</h4>
+            <p>Peace belongs to everyone: the deaf, the blind, the elderly, the young, the poor, the educated and the
+              uneducated.</p>
+          </div>
+          <div class="value-card reveal">
+            <div class="icon">🤝</div>
+            <h4>Dialogue First</h4>
+            <p>We believe every conflict — without exception — is better resolved through conversation than through
+              violence or silence.</p>
+          </div>
+          <div class="value-card reveal">
+            <div class="icon">📚</div>
+            <h4>Education</h4>
+            <p>Sustainable peace requires knowledge. We invest in peace education because informed communities make
+              better choices.</p>
+          </div>
+          <div class="value-card reveal">
+            <div class="icon">⚖️</div>
+            <h4>Impartiality</h4>
+            <p>We have no political affiliation. We serve every community, every side, every voice — equally and without
+              judgment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline Dynamic Grid Section -->
+    <section class="bg-paper-dim" style="padding:70px 0;">
+      <div class="container">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;">
+          <div class="reveal">
+            <p class="eyebrow" style="color:var(--green-deep);margin-bottom:16px;">Our Journey</p>
+            <h2>How We Got Here</h2>
+            <div class="timeline" style="margin-top:28px;">
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">2023</div>
+                <div class="tl-title">PeaceBridge Initiative Founded</div>
+                <div class="tl-desc">Started by a group of young peacebuilders in Eldoret, committed to harnessing
+                  technology for community peace.</div>
+              </div>
+              <div class="tl-item green">
+                <div class="tl-dot"></div>
+                <div class="tl-year">2024</div>
+                <div class="tl-title">First Anonymous Case Reporting System</div>
+                <div class="tl-desc">Launched a secure framework for community members to safely document local disputes
+                  without fear of exposure.</div>
+              </div>
+              <div class="tl-item gold">
+                <div class="tl-dot"></div>
+                <div class="tl-year">2025</div>
+                <div class="tl-title">Peace Library &amp; AI Dialogue Launched</div>
+                <div class="tl-desc">Expanded the platform with an interactive information repository and a dedicated AI
+                  assistant for secure dialogue.</div>
+              </div>
+              <div class="tl-item teal">
+                <div class="tl-dot"></div>
+                <div class="tl-year">2026</div>
+                <div class="tl-title">Civic Harmony &amp; Community Campaigns</div>
+                <div class="tl-desc">PeaceBridge mobilizes local urban and rural spaces toward peaceful dispute
+                  resolution and community cohesion.</div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal">
+            <p class="eyebrow" style="color:var(--navy);margin-bottom:16px;">What Makes Us Different</p>
+            <h2>Built for Every Kenyan</h2>
+            <p style="color:#4b5a72;margin-bottom:20px;">Most peacebuilding platforms require technical literacy and
+              heavy network infrastructure. PeaceBridge is designed natively to be accessible for:</p>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;">
+              <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;"><span
+                  style="font-size:1.3rem;">👁️</span>People with low vision — screen reader compatible, high contrast
+                mode, text-to-speech on every layout layer</li>
+              <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;"><span
+                  style="font-size:1.3rem;">👂</span>Deaf community members — absolute text alternatives and non-reliant
+                audio pathways</li>
+              <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;"><span
+                  style="font-size:1.3rem;">🎤</span>People who cannot type — complete native voice-to-text integration
+                fields</li>
+              <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;"><span
+                  style="font-size:1.3rem;">📱</span>Mobile-first optimization — built to match resource boundaries on
+                entry-level mobile devices</li>
+              <li style="display:flex;align-items:center;gap:12px;font-size:.95rem;"><span
+                  style="font-size:1.3rem;">📡</span>Low bandwidth overheads — cached assets built to sustain stability
+                even on flaky mobile data networks</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Peace Pledge Interaction Section -->
+    <section style="padding:70px 0;">
+      <div class="container">
+        <div class="pledge-card reveal" role="region" aria-labelledby="pledge-title">
+          <div style="font-size:3rem;margin-bottom:12px;" aria-hidden="true">✊🕊️</div>
+          <h2 id="pledge-title">Take the PeaceBridge Pledge</h2>
+          <p class="pledge-text">
+            "I commit to choosing dialogue before division. I will listen before I react. I will remember that my
+            neighbor — whatever they believe or whoever they support — is still my neighbor. I choose peace."
+          </p>
+          <div class="pledge-input">
+            <input type="text" id="pledge-name" placeholder="Your name, county, or village" maxlength="40"
+              aria-label="Enter your name to sign the pledge">
+            <button class="btn btn-gold" onclick="takePledge()" aria-label="Sign the peace pledge"
+              style="background:var(--navy);color:#fff;border:none;padding:0 24px;border-radius:10px;font-weight:700;cursor:pointer;">✊
+              Sign</button>
+          </div>
+          <p style="font-size:.82rem;color:#8a99b2;" id="pledge-count-text">Be one of the voices for peace.</p>
+          <div class="pledge-names" id="pledge-names" aria-live="polite" aria-label="Names of peace pledgers"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;padding-top:0;">
+        <span>© 2025–2026 PeaceBridge Initiative</span>
+        <span>🌿 Copyright @catsrovercrew.ke 🌿</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="to-top" aria-label="Back to top">↑</button>
+  <script src="app.js"></script>
+  <script>
+    // Localized Kenyan names seed list
+    const SEED_PLEDGES = ['Mwangi Kimathi', 'Achieng Onyango', 'Chepngetich Koech', 'Kipruto Biwott', 'Wanjiku Kamau', 'Omondi Otieno', 'Kibet Cheruiyot', 'Mutua Musyoka', 'Nekesa Wafula', 'Moraa Nyaboke', 'Atieno Ochieng', 'Jeycyn Jeff'];
+
+    // Local storage structural mockup state safety check
+    const mockStore = {
+      get: function (key, fallback) {
+        try { return (window.PB && window.PB.store) ? window.PB.store.get(key, fallback) : fallback; } catch (e) { return fallback; }
+      },
+      set: function (key, value) {
+        try { if (window.PB && window.PB.store) window.PB.store.set(key, value); } catch (e) { }
+      }
+    };
+
+    function loadPledges() {
+      const stored = mockStore.get('pledges', []);
+      return [...SEED_PLEDGES.filter(s => !stored.includes(s)), ...stored];
+    }
+
+    function takePledge() {
+      const nameEl = document.getElementById('pledge-name');
+      const name = nameEl ? nameEl.value.trim() : '';
+      if (!name) { alert('Please enter your name or village to sign the pledge.'); return; }
+
+      const pledges = mockStore.get('pledges', []);
+      if (!pledges.includes(name)) {
+        pledges.push(name);
+        mockStore.set('pledges', pledges);
+      }
+      if (nameEl) nameEl.value = '';
+      renderPledges();
+
+      if (window.PB && typeof window.PB.announce === 'function') {
+        window.PB.announce('Thank you, ' + name + '! Your pledge for peace has been signed.');
+      }
+    }
+
+    function renderPledges() {
+      const all = loadPledges();
+      const wrap = document.getElementById('pledge-names');
+      if (wrap) wrap.innerHTML = all.slice(0, 30).map(n => `<span class="pledge-name-pill">🕊️ ${n}</span>`).join('');
+      const txt = document.getElementById('pledge-count-text');
+      if (txt) txt.textContent = all.length + ' people have signed the Peace Pledge.';
+    }
+
+    // Mobile Navigation Hamburg Menu Selector Fallback
+    (function () {
+      const toggle = document.querySelector('.nav-toggle');
+      const links = document.getElementById('nav-links');
+      if (toggle && links) {
+        toggle.addEventListener('click', function () {
+          const open = links.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', open);
+        });
+      }
+    })();
+
+    // Fail-safe Intersection Observer for Reveal Animations
+    document.addEventListener('DOMContentLoaded', function () {
+      renderPledges();
+
+      const revealElements = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        revealElements.forEach(el => observer.observe(el));
+      } else {
+        // Fallback if browser doesn't support IntersectionObserver
+        revealElements.forEach(el => el.classList.add('visible'));
+      }
+    });
+  </script>
+</body>
+
+</html>

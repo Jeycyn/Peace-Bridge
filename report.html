@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Secure and completely anonymous conflict reporting within Kenyan communities. PeaceBridge Initiative handles every submission with structural integrity.">
+  <title>Report a Case — PeaceBridge Initiative</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/icon.jpeg">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* --- Premium Editorial Core System --- */
+    :root {
+      --font-serif: "Playfair Display", "Didot", "Georgia", serif;
+      --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", "Courier New", monospace;
+
+      --color-bg: #fbfbfa;
+      --color-ink: #11141a;
+      --color-ink-muted: #5c6475;
+      --color-border: #e4e6eb;
+      --color-accent: #1b3358;
+      --color-accent-light: #f2f5fa;
+      --color-accent-dim: rgba(27, 51, 88, 0.05);
+      --color-success: #2e5a36;
+      --color-success-bg: #f3f7f4;
+      --color-gold: #c39237;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-ink);
+      font-family: var(--font-sans);
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .editorial-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* --- Asymmetric Layout Grid --- */
+    .report-hero-section {
+      padding: 100px 0 60px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .report-hero-grid {
+      display: grid;
+      grid-template-columns: 7fr 5fr;
+      gap: 80px;
+      align-items: end;
+    }
+
+    .report-hero-grid h1 {
+      font-family: var(--font-serif);
+      font-size: 3.5rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin: 0 0 24px 0;
+      letter-spacing: -0.02em;
+    }
+
+    .report-hero-grid p {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: var(--color-ink-muted);
+      margin: 0;
+      max-width: 540px;
+    }
+
+    .hero-meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-success);
+      background: var(--color-success-bg);
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+    }
+
+    /* Structural Main Split */
+    .editorial-workspace {
+      display: grid;
+      grid-template-columns: 7fr 4fr;
+      gap: 100px;
+      padding: 80px 0 120px 0;
+    }
+
+    /* --- Dynamic Step Progression Matrix --- */
+    .matrix-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 64px;
+    }
+
+    .matrix-step-item {
+      border-top: 2px solid var(--color-border);
+      padding-top: 12px;
+      transition: border-color 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .matrix-step-item.active {
+      border-top-color: var(--color-ink);
+    }
+
+    .matrix-step-item.done {
+      border-top-color: var(--color-success);
+    }
+
+    .matrix-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-ink-muted);
+      display: block;
+    }
+
+    .matrix-step-item.active .matrix-label {
+      color: var(--color-ink);
+      font-weight: 600;
+    }
+
+    /* --- High-End Form Architecture --- */
+    .form-step {
+      display: none;
+    }
+
+    .form-step.active {
+      display: block;
+      animation: fadeIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .step-header-text {
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-weight: 400;
+      margin: 0 0 40px 0;
+      color: var(--color-ink);
+    }
+
+    .field-group {
+      margin-bottom: 36px;
+    }
+
+    .field-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    label {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--color-ink);
+    }
+
+    .required-mark {
+      color: var(--color-gold);
+    }
+
+    /* Sophisticated Minimalist Inputs */
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--color-border);
+      padding: 14px 0;
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      color: var(--color-ink);
+      border-radius: 0;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-bottom-color: var(--color-ink);
+    }
+
+    /* Audio Capture / Mic Input Integration */
+    .audio-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .audio-input-wrapper input {
+      padding-right: 40px;
+    }
+
+    .editorial-mic-btn {
+      position: absolute;
+      right: 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      font-size: 1.1rem;
+      opacity: 0.4;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .editorial-mic-btn:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    /* --- Bespoke Segmented Type Controls --- */
+    .editorial-grid-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .custom-option-node {
+      position: relative;
+    }
+
+    .custom-option-node input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+    }
+
+    .custom-option-node label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--color-border);
+      padding: 18px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      background: #ffffff;
+    }
+
+    .custom-option-node input:checked+label {
+      border-color: var(--color-ink);
+      background: var(--color-accent-light);
+      color: var(--color-accent);
+    }
+
+    /* Action Control Engine */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .btn-editorial {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 16px 32px;
+      border: 1px solid var(--color-ink);
+      background: transparent;
+      color: var(--color-ink);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-editorial.primary {
+      background: var(--color-ink);
+      color: #ffffff;
+    }
+
+    .btn-editorial:hover {
+      background: var(--color-ink);
+      color: #ffffff;
+      opacity: 0.9;
+    }
+
+    .btn-editorial.primary:hover {
+      background: transparent;
+      color: var(--color-ink);
+    }
+
+    /* --- Review Desk Architecture --- */
+    .review-manifest {
+      background: #ffffff;
+      border: 1px solid var(--color-border);
+      padding: 40px;
+    }
+
+    .manifest-row {
+      margin-bottom: 24px;
+      border-bottom: 1px dashed var(--color-border);
+      padding-bottom: 16px;
+    }
+
+    .manifest-row:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .manifest-key {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--color-ink-muted);
+      margin-bottom: 4px;
+    }
+
+    .manifest-val {
+      font-size: 1.05rem;
+      color: var(--color-ink);
+    }
+
+    /* --- Success State Screen --- */
+    .success-screen {
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .success-stamp {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .editorial-id-card {
+      border: 1px solid var(--color-ink);
+      max-width: 420px;
+      margin: 40px auto;
+      padding: 32px;
+      background: #ffffff;
+    }
+
+    /* --- Editorial Sidebar Panel --- */
+    .sidebar-panel {
+      position: sticky;
+      top: 60px;
+    }
+
+    .sidebar-segment {
+      margin-bottom: 48px;
+    }
+
+    .sidebar-segment h3 {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin: 0 0 20px 0;
+      color: var(--color-ink);
+      border-bottom: 1px solid var(--color-ink);
+      padding-bottom: 8px;
+    }
+
+    .sidebar-segment p,
+    .sidebar-segment ul {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--color-ink-muted);
+    }
+
+    .sidebar-segment ul {
+      padding-left: 16px;
+      margin: 0;
+    }
+
+    .sidebar-segment ul li {
+      margin-bottom: 8px;
+    }
+
+    .emergency-directory {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+
+    .emergency-link {
+      color: var(--color-ink);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid var(--color-ink);
+    }
+
+    /* Ledger List (Recent Items) */
+    .ledger-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ledger-node {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .ledger-node:last-child {
+      border-bottom: none;
+    }
+
+    .ledger-meta {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--color-ink-muted);
+      margin-bottom: 6px;
+    }
+
+    .ledger-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    /* Responsive Scaling Overrides */
+    @media(max-width: 960px) {
+      .editorial-workspace {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      .report-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .report-hero-section {
+        padding: 60px 0 40px 0;
+      }
+    }
+
+    @media(max-width: 600px) {
+      .editorial-grid-options {
+        grid-template-columns: 1fr;
+      }
+
+      .field-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .report-hero-grid h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main id="main-content">
+    <!-- EDITORIAL HERO -->
+    <section class="report-hero-section">
+      <div class="editorial-container">
+        <div class="report-hero-grid">
+          <div>
+            <div class="hero-meta-badge">🔒 Secure &amp; End-to-End Anonymous</div>
+            <h1>Report a Conflict Case</h1>
+          </div>
+          <div>
+            <p>Structural narrative intake. Zero identity parameters collected. Your data is protected locally while our
+              platform manages community mediation pipelines across Kenya manually.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="editorial-container">
+      <div class="editorial-workspace">
+
+        <!-- MAIN PROGRESSIVE FLOW ARCHITECTURE -->
+        <div class="workspace-flow-core">
+
+          <!-- Structural Top Status Progress Block Matrix -->
+          <div class="matrix-steps" role="envoy" aria-label="Intake Progress Metric Matrix">
+            <div class="matrix-step-item active" id="sdot-1"><span class="matrix-label">01 / Location</span></div>
+            <div class="matrix-step-item" id="sdot-2"><span class="matrix-label">02 / Classification</span></div>
+            <div class="matrix-step-item" id="sdot-3"><span class="matrix-label">03 / Description</span></div>
+            <div class="matrix-step-item" id="sdot-4"><span class="matrix-label">04 / Manifest</span></div>
+          </div>
+
+          <!-- STEP 1: SPATIAL METRICS (KENYAN GEOGRAPHIES) -->
+          <div id="step1" class="form-step active">
+            <h3 class="step-header-text">Where is the event originating?</h3>
+
+            <div class="field-grid-2">
+              <div class="field-group">
+                <label for="f-county">County <span class="required-mark">*</span></label>
+                <select id="f-county" required>
+                  <option value="">— Select origin county —</option>
+                  <option>Nairobi</option>
+                  <option>Uasin Gishu</option>
+                  <option>Mombasa</option>
+                  <option>Kisumu</option>
+                  <option>Nakuru</option>
+                  <option>Kiambu</option>
+                  <option>Kakamega</option>
+                  <option>Nyeri</option>
+                  <option>Kilifi</option>
+                  <option>Machakos</option>
+                  <option>Meru</option>
+                  <option>Kericho</option>
+                  <option>Bungoma</option>
+                  <option>Trans Nzoia</option>
+                  <option>Turkana</option>
+                  <option>Narok</option>
+                  <option>Kajiado</option>
+                  <option>Other County</option>
+                </select>
+              </div>
+
+              <div class="field-group">
+                <label for="f-subcounty">Sub-County / Constituency <span class="required-mark">*</span></label>
+                <div class="audio-input-wrapper">
+                  <input id="f-subcounty" type="text" placeholder="e.g. Ainabkoi, Westlands" required>
+                  <button class="editorial-mic-btn" type="button" id="mic-subcounty"
+                    title="Transcribe speech">🎤</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="f-village">Village / Ward / Local Milestone <span class="required-mark">*</span></label>
+              <div class="audio-input-wrapper">
+                <input id="f-village" type="text" placeholder="e.g. Kapsoya, Kiamunyi Village" required>
+                <button class="editorial-mic-btn" type="button" id="mic-village" title="Transcribe speech">🎤</button>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <div></div>
+              <button class="btn-editorial primary" onclick="goStep(2)">Proceed to Classification →</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: CLASSIFICATION INTERFACE -->
+          <div id="step2" class="form-step">
+            <h3 class="step-header-text">Select conflict classification node</h3>
+
+            <div class="field-group">
+              <div class="editorial-grid-options">
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct1"
+                    value="Land Dispute"><label for="ct1">Land Dispute</label></div>
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct2"
+                    value="Domestic Violence"><label for="ct2">Domestic Violence / SGBV</label></div>
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct3"
+                    value="Election Conflict"><label for="ct3">Election Conflict</label></div>
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct4"
+                    value="Ethnic / Tribal Tension"><label for="ct4">Ethnic / Community Tension</label></div>
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct5"
+                    value="Resource Conflict"><label for="ct5">Water or Grazing Resource Dispute</label></div>
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct6"
+                    value="Religious Tension"><label for="ct6">Religious Tension</label></div>
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct7"
+                    value="Youth Gang Violence"><label for="ct7">Urban/Youth Gang Violence</label></div>
+                <div class="custom-option-node"><input type="radio" name="conflict_type" id="ct8" value="Other"><label
+                    for="ct8">Other Narrative</label></div>
+              </div>
+            </div>
+
+            <div class="field-group" style="margin-top: 48px;">
+              <label for="f-urgency">Urgency Matrix Weight</label>
+              <select id="f-urgency">
+                <option value="low">Low Level — Latent tension status</option>
+                <option value="medium" selected>Medium Level — Escalation phase detected</option>
+                <option value="high">High Level — Acute structural threat</option>
+              </select>
+            </div>
+
+            <div class="action-row">
+              <button class="btn-editorial" onclick="goStep(1)">← Back</button>
+              <button class="btn-editorial primary" onclick="goStep(3)">Proceed to Narrative →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: LOGICAL NARRATIVE BLOCK -->
+          <div id="step3" class="form-step">
+            <h3 class="step-header-text">Statement Log Description</h3>
+
+            <div class="field-group">
+              <label for="f-desc">Detailed Case Narrative Log <span class="required-mark">*</span></label>
+              <div class="audio-input-wrapper">
+                <textarea id="f-desc" rows="8"
+                  placeholder="Transcribe comprehensive structural details here... Min 20 characters."
+                  required></textarea>
+                <button class="editorial-mic-btn" type="button" id="mic-desc" style="top: 14px;"
+                  title="Transcribe narrative">🎤</button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="f-witnesses">Estimated Impact Scope</label>
+              <select id="f-witnesses">
+                <option value="">— Unspecified Scope —</option>
+                <option>1–5 individuals affected</option>
+                <option>6–20 individuals affected</option>
+                <option>20–100 individuals affected</option>
+                <option>Community wide scope</option>
+                <option>Macro-regional scope</option>
+              </select>
+            </div>
+
+            <div class="action-row">
+              <button class="btn-editorial" onclick="goStep(2)">← Back</button>
+              <button class="btn-editorial primary" onclick="goStep(4)">Generate Manifest ↓</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: EDITORIAL OVERVIEW MANIFEST -->
+          <div id="step4" class="form-step">
+            <h3 class="step-header-text">Review System Manifest Log</h3>
+
+            <div id="review-box" class="review-manifest">
+              Compiling node assets...
+            </div>
+
+            <div class="action-row">
+              <button class="btn-editorial" onclick="goStep(3)">← Modify</button>
+              <button class="btn-editorial primary" onclick="submitReport()">Execute Verification &amp; Submit</button>
+            </div>
+          </div>
+
+          <!-- SUCCESS RENDER DESK -->
+          <div id="success-state" class="success-screen" style="display:none;">
+            <div class="success-stamp">Log Committed Successfully.</div>
+            <p style="color: var(--color-ink-muted); max-width: 500px; margin: 0 auto 32px auto;">Your narrative has
+              been stored inside the global network configuration block asynchronously. Save your reference matrix
+              details below.</p>
+
+            <div class="editorial-id-card">
+              <div
+                style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--color-ink-muted); text-transform: uppercase; margin-bottom: 8px;">
+                System Case Hash Key</div>
+              <div id="case-id-display"
+                style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 700; color: var(--color-gold); letter-spacing: 0.05em;">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 40px;">
+              <button onclick="printReport()" class="btn-editorial">Print Physical Sheet</button>
+              <a href="index.html" class="btn-editorial primary" style="text-decoration: none;">Return System Base</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- EDITORIAL SIDEBAR RIGID LAYOUT -->
+        <aside class="sidebar-panel">
+          <div class="sidebar-segment">
+            <h3>Security Metrics</h3>
+            <p>We log zero client tracking headers, explicit IP signatures, or geolocation cookies. Data objects exist
+              solely within user context blocks prior to manual state updates.</p>
+          </div>
+
+          <div class="sidebar-segment">
+            <h3>Emergency Crisis Routing</h3>
+            <p>If immediate spatial intervention parameters are actively breached in your locality, bypass digital
+              application protocols and contact emergency lines directly:</p>
+            <div class="emergency-directory">
+              National Police: <a href="tel:999" class="emergency-link">999</a> / <a href="tel:112"
+                class="emergency-link">112</a><br>
+              Medical Services: <a href="tel:911" class="emergency-link">911</a><br>
+              National GBV Helpline: <a href="tel:1195" class="emergency-link">1195</a>
+            </div>
+          </div>
+
+          <div class="sidebar-segment">
+            <h3>Device Local Ledger</h3>
+            <div class="ledger-stack" id="recent-list">
+              <p style="font-size: 0.8rem; color: var(--color-ink-muted);">No records linked to current local storage
+                array state.</p>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    let currentStep = 1;
+    function goStep(n) {
+      if (n > currentStep) {
+        if (currentStep === 1) {
+          if (!document.getElementById('f-county').value) { alert('Please select a Kenyan origin county.'); return; }
+          if (!document.getElementById('f-subcounty').value.trim()) { alert('Please declare a sub-county parameter.'); return; }
+          if (!document.getElementById('f-village').value.trim()) { alert('Please declare a localized ward or village path.'); return; }
+        }
+        if (currentStep === 2) {
+          if (!document.querySelector('input[name="conflict_type"]:checked')) { alert('Please map a classification node.'); return; }
+        }
+        if (currentStep === 3) {
+          const d = document.getElementById('f-desc').value.trim();
+          if (d.length < 20) { alert('Statement requires higher resolution narrative data (Minimum 20 characters).'); return; }
+        }
+      }
+
+      document.getElementById('step' + currentStep).classList.remove('active');
+      document.getElementById('sdot-' + currentStep).classList.remove('active');
+      if (n > currentStep) document.getElementById('sdot-' + currentStep).classList.add('done');
+
+      currentStep = n;
+      document.getElementById('step' + currentStep).classList.add('active');
+      document.getElementById('sdot-' + currentStep).classList.add('active');
+      document.getElementById('sdot-' + currentStep).classList.remove('done');
+
+      if (n === 4) buildReview();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function buildReview() {
+      const county = document.getElementById('f-county').value;
+      const sub = document.getElementById('f-subcounty').value;
+      const village = document.getElementById('f-village').value;
+      const type = (document.querySelector('input[name="conflict_type"]:checked') || { value: 'Unmapped Node' }).value;
+      const urgency = document.getElementById('f-urgency').value;
+      const desc = document.getElementById('f-desc').value;
+      const affected = document.getElementById('f-witnesses').value || 'Unspecified Scale';
+
+      document.getElementById('review-box').innerHTML = `
+    <div class="manifest-row"><div class="manifest-key">Kenyan Geo Node Target</div><div class="manifest-val">${county} County — ${sub} Sub-County — ${village}</div></div>
+    <div class="manifest-row"><div class="manifest-key">Classification Mapping</div><div class="manifest-val">${type}</div></div>
+    <div class="manifest-row"><div class="manifest-key">Urgency Metric Matrix</div><div class="manifest-val">${urgency.toUpperCase()}</div></div>
+    <div class="manifest-row"><div class="manifest-key">Impact Vector Scale</div><div class="manifest-val">${affected}</div></div>
+    <div class="manifest-row"><div class="manifest-key">Narrative Statement Content</div><div class="manifest-val" style="white-space: pre-wrap; line-height: 1.6;">${desc}</div></div>
+  `;
+    }
+
+    function submitReport() {
+      const county = document.getElementById('f-county').value;
+      const sub = document.getElementById('f-subcounty').value;
+      const village = document.getElementById('f-village').value;
+      const type = (document.querySelector('input[name="conflict_type"]:checked') || { value: 'Generic' }).value;
+      const urgency = document.getElementById('f-urgency').value;
+      const desc = document.getElementById('f-desc').value;
+      const affected = document.getElementById('f-witnesses').value || 'Unspecified';
+
+      const id = PB.uid('CASE');
+      const report = { id, county, sub, village, type, urgency, desc, affected, date: new Date().toLocaleDateString() };
+      PB.store.push('reports', report);
+
+      document.getElementById('step4').style.display = 'none';
+      document.querySelector('.matrix-steps').style.display = 'none';
+      document.getElementById('success-state').style.display = 'block';
+      document.getElementById('case-id-display').textContent = id;
+      loadRecentReports();
+      PB.announce('System entry finalized execution. Record id mapped: ' + id);
+    }
+
+    function printReport() {
+      const id = document.getElementById('case-id-display').textContent;
+      const w = window.open('', '', 'width=800,height=700');
+      w.document.write(`<html><head><title>System Manifest Print</title><style>body{font-family:serif;padding:50px;color:#111;line-height:1.6;} h2{font-weight:normal;letter-spacing:-1px;} .id{font-family:monospace;font-size:1.2rem;color:#c39237;}</style></head><body><h2>PeaceBridge Intake Manifest Log (Kenya)</h2><p class="id">Hash: ${id}</p><p>Timestamp: ${new Date().toLocaleString()}</p><hr><p>Encrypted data pipeline input complete. No identification records attached.</p></body></html>`);
+      w.print();
+    }
+
+    function loadRecentReports() {
+      const reports = PB.store.get('reports', []).slice(0, 3);
+      const wrap = document.getElementById('recent-list');
+      if (!reports.length) { wrap.innerHTML = '<p style="font-size: 0.8rem; color: var(--color-ink-muted);">No records linked to current local storage array state.</p>'; return; }
+      wrap.innerHTML = reports.map(r => `
+    <div class="ledger-node">
+      <div class="ledger-meta">${r.date} — Ref: ${r.id}</div>
+      <div class="ledger-title">${r.type}</div>
+      <div style="font-size:0.82rem; color: var(--color-ink-muted);">${r.county} Co. → ${r.village}</div>
+    </div>
+  `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      PB.attachMic(document.getElementById('mic-subcounty'), document.getElementById('f-subcounty'));
+      PB.attachMic(document.getElementById('mic-village'), document.getElementById('f-village'));
+      PB.attachMic(document.getElementById('mic-desc'), document.getElementById('f-desc'));
+      loadRecentReports();
+    });
+  </script>
+</body>
+
+</html>

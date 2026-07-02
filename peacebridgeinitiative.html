@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PeaceBridge Initiative — Voices United for Peace and Progress. Empowering young people through dialogue and peaceful communities.">
+<title>PeaceBridge Initiative — Voices United for Peace and Progress</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/icon.jpeg">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ---- HOME-ONLY STYLES ---- */
+.features-intro{ max-width:620px; margin:0 auto 48px; text-align:center; color:#4b5a72; }
+
+/* 4 voice pillars */
+.voices-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+@media(max-width:980px){ .voices-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:560px){ .voices-grid{ grid-template-columns:1fr; } }
+.voice-card{
+  border-radius: var(--radius); padding:30px 24px 24px;
+  text-decoration:none; display:block; color:inherit;
+  transition: transform .2s, box-shadow .2s;
+  border: 2px solid transparent;
+}
+.voice-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px var(--shadow-c); }
+.vc-navy{ background:linear-gradient(135deg,#EBF0F8,#D9E4F2); border-color: rgba(27,51,88,.15); }
+.vc-green{ background:linear-gradient(135deg,#E8F3E6,#D2EAD0); border-color: rgba(63,125,63,.15); }
+.vc-gold { background:linear-gradient(135deg,#FDF3DC,#F7E4B0); border-color: rgba(217,165,61,.2); }
+.vc-teal { background:linear-gradient(135deg,#E5F4F7,#BFDFEA); border-color: rgba(46,140,158,.15); }
+.vc-num{ font-family:var(--font-display); font-size:3.5rem; font-weight:900; opacity:.13; line-height:1; margin-bottom:-14px; }
+.vc-icon{ font-size:2.2rem; margin-bottom:12px; }
+.vc-title{ font-family:var(--font-display); font-size:1.22rem; font-weight:700; margin-bottom:8px; color:var(--navy-ink); }
+.vc-desc{ font-size:.88rem; color:#556070; line-height:1.5; }
+.vc-link{ display:inline-flex; align-items:center; gap:5px; margin-top:16px; font-size:.82rem; font-weight:700; }
+.vc-navy .vc-link{ color:var(--navy); }
+.vc-green .vc-link{ color:var(--green-deep); }
+.vc-gold .vc-link{ color:var(--gold-deep); }
+.vc-teal .vc-link{ color:var(--teal-deep); }
+
+/* Books teaser strip */
+.books-strip{ display:flex; gap:16px; overflow-x:auto; padding-bottom:10px; scrollbar-width:thin; }
+.books-strip::-webkit-scrollbar{ height:4px; }
+.books-strip::-webkit-scrollbar-thumb{ background:var(--paper-line); border-radius:4px; }
+.book-chip{
+  flex:0 0 auto; width:130px; border-radius:12px; overflow:hidden;
+  background:#fff; border:1px solid var(--paper-line);
+  text-align:center; padding:20px 12px 14px;
+  transition: transform .2s, box-shadow .2s;
+}
+.book-chip:hover{ transform:translateY(-4px); box-shadow:0 12px 24px var(--shadow-c); }
+.book-chip .cover{ font-size:2.6rem; margin-bottom:8px; }
+.book-chip .title{ font-size:.72rem; font-weight:700; color:var(--navy); line-height:1.3; }
+
+/* Mission strip */
+.mission-strip{
+  background: var(--green-deep); color:#fff;
+  padding: 56px 0; text-align:center;
+}
+.mission-strip .big{ font-family:var(--font-display); font-size:clamp(1.5rem,3vw,2.4rem); font-weight:700; max-width:740px; margin:0 auto 18px; }
+.mission-strip p{ max-width:560px; margin:0 auto; opacity:.85; }
+
+/* Impact stats */
+.stats-section{ padding:70px 0; background:var(--navy); }
+.stats-section .stat-num{ color:#fff; }
+.stats-section .stat-label{ color:#9aabbf; }
+
+/* Animation helpers */
+.stagger .reveal:nth-child(1){ transition-delay:.05s; }
+.stagger .reveal:nth-child(2){ transition-delay:.12s; }
+.stagger .reveal:nth-child(3){ transition-delay:.19s; }
+.stagger .reveal:nth-child(4){ transition-delay:.26s; }
+
+/* Hero particles overlay */
+.particles{ position:absolute; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.particle{
+  position:absolute; width:6px; height:6px; border-radius:50%;
+  animation: rise linear infinite;
+  opacity:0;
+}
+@keyframes rise{ 0%{ transform:translateY(0) scale(0); opacity:.7; } 100%{ transform:translateY(-400px) scale(1.5); opacity:0; } }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- A11Y BAR -->
+<div class="a11y-bar" role="toolbar" aria-label="Accessibility tools">
+  <div class="container">
+    <span class="a11y-label">Accessibility:</span>
+    <button class="a11y-btn" data-action="font-size" aria-label="Change text size"><span class="a11y-size-label">A</span> Text Size</button>
+    <button class="a11y-btn" data-action="contrast" aria-pressed="false">◑ Contrast</button>
+    <button class="a11y-btn" data-action="dyslexic" aria-pressed="false">𝖠 Easy Read</button>
+    <button class="a11y-btn" data-action="read-page" aria-pressed="false">🔊 <span class="a11y-label-text">Read page</span></button>
+    <button class="a11y-btn" data-action="voice-nav">🎤 <span><span class="dot"></span></span> Voice Nav</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<header class="site-header" role="banner">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="index.html" aria-label="PeaceBridge Initiative home">
+      <img src="/icon.jpeg" alt="PeaceBridge dove logo" width="46" height="46">
+      <div class="brand-text">PeaceBridge<small>Initiative</small></div>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
+      <a href="index.html" class="active" aria-current="page">Home</a>
+      <a href="about.html">About</a>
+      <a href="report.html">Report a Case</a>
+      <a href="dialogue.html">AI Dialogue</a>
+      <a href="library.html">Library</a>
+      <a href="community.html">Community</a>
+      <a href="certificate.html" class="nav-cta">Get Certificate</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main-content">
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" aria-label="Welcome to PeaceBridge Initiative">
+  <div class="particles" id="particles" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="eyebrow hero-eyebrow" style="color:var(--green-deep)">🕊 PeaceBridge Initiative · Kenya</p>
+      <h1>
+        Empowering <span class="accent-green">Young People</span><br>
+        Through <span class="accent-gold">Dialogue</span> &amp; Peaceful Communities
+      </h1>
+      <p class="hero-sub">Every voice matters. Every conflict can be transformed. Together we build bridges where there were walls.</p>
+      <div class="hero-actions">
+        <a href="report.html" class="btn btn-primary btn-lg">📋 Report a Case</a>
+        <a href="dialogue.html" class="btn btn-teal btn-lg">💬 Talk to AI Assistant</a>
+        <a href="library.html" class="btn btn-outline btn-lg">📚 Peace Library</a>
+      </div>
+      <p style="margin-top:20px;font-size:.82rem;color:#7a8da6;">
+        <span style="background:rgba(63,125,63,.1);color:var(--green-deep);padding:4px 10px;border-radius:20px;font-weight:700;">✓ Anonymous</span>&nbsp;&nbsp;
+        <span style="background:rgba(46,140,158,.1);color:var(--teal-deep);padding:4px 10px;border-radius:20px;font-weight:700;">✓ Free Forever</span>&nbsp;&nbsp;
+        <span style="background:rgba(27,51,88,.1);color:var(--navy);padding:4px 10px;border-radius:20px;font-weight:700;">✓ Works Offline</span>
+      </p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="dove-wrap">
+        <div class="glow"></div>
+        <img src="/icon.jpeg" alt="PeaceBridge dove and bridge logo" width="380" height="380">
+      </div>
+    </div>
+  </div>
+
+  <!-- Animated river band -->
+  <div class="river-band" aria-hidden="true">
+    <svg viewBox="0 0 1440 130" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,80 Q180,40 360,80 T720,80 T1080,80 T1440,80 L1440,130 L0,130 Z" fill="#2A5C2E" opacity="0.15"/>
+      <path d="M0,95 Q200,55 400,95 T800,95 T1200,95 T1600,95 L1600,130 L0,130 Z" fill="#2A5C2E" opacity="0.22"/>
+      <path d="M0,108 Q240,70 480,108 T960,108 T1440,108 L1440,130 L0,130 Z" fill="#3F7D3F" opacity="0.18"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===================== QUOTE ROTATOR ===================== -->
+<div class="quote-band" aria-label="Peace quotes">
+  <div class="container">
+    <div class="quote-wrap">
+      <p class="quote-text" aria-live="polite" aria-atomic="true"></p>
+      <p class="quote-author"></p>
+      <div class="quote-progress" role="progressbar" aria-label="Time to next quote"><span></span></div>
+      <div class="quote-dots" role="tablist" aria-label="Navigate quotes"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOUR VOICES / PILLARS ===================== -->
+<section aria-labelledby="voices-title" style="padding:80px 0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow" style="color:var(--green-deep);justify-content:center;">What We Offer</p>
+      <h2 id="voices-title">Four Paths to Peace</h2>
+      <p>Every community member — young or old, hearing or deaf, literate or not — deserves access to peacebuilding tools.</p>
+    </div>
+    <div class="voices-grid stagger">
+      <a href="report.html" class="voice-card vc-navy reveal" aria-label="Report a case anonymously">
+        <div class="vc-num">01</div>
+        <div class="vc-icon">📋</div>
+        <div class="vc-title">Report a Case</div>
+        <p class="vc-desc">Anonymously report conflicts happening in your village, sub-county, or county. Your identity is never revealed.</p>
+        <span class="vc-link">Report now →</span>
+      </a>
+      <a href="dialogue.html" class="voice-card vc-teal reveal" aria-label="Talk to AI peace assistant">
+        <div class="vc-num">02</div>
+        <div class="vc-icon">💬</div>
+        <div class="vc-title">AI Dialogue</div>
+        <p class="vc-desc">Tell your problems to our anonymous AI assistant. It listens, responds with empathy, and guides you toward resolution.</p>
+        <span class="vc-link">Start talking →</span>
+      </a>
+      <a href="library.html" class="voice-card vc-green reveal" aria-label="Read peace books and watch videos">
+        <div class="vc-num">03</div>
+        <div class="vc-icon">📚</div>
+        <div class="vc-title">Peace Library</div>
+        <p class="vc-desc">Six books and curated videos about dialogue over conflict. Complete them to earn your PeaceBridge Certificate.</p>
+        <span class="vc-link">Explore library →</span>
+      </a>
+      <a href="community.html" class="voice-card vc-gold reveal" aria-label="Join community discussion">
+        <div class="vc-num">04</div>
+        <div class="vc-icon">🤝</div>
+        <div class="vc-title">Community Voice</div>
+        <p class="vc-desc">Share your ideas, suggestions, and stories with the wider PeaceBridge community. Every voice shapes our work.</p>
+        <span class="vc-link">Join discussion →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MISSION STRIP ===================== -->
+<div class="mission-strip reveal">
+  <div class="container">
+    <p class="big">"Elections are near. Let us choose dialogue over division — and remind our neighbors that we are more alike than different."</p>
+    <p>The 2026 election season is a time of choice. PeaceBridge Initiative asks communities across Kenya to commit to peaceful expression of all views.</p>
+    <div style="margin-top:28px;">
+      <a href="report.html" class="btn btn-gold" style="margin-right:12px;">Report a Conflict</a>
+      <a href="about.html" class="btn btn-outline" style="border-color:#fff;color:#fff;">Our Mission</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== IMPACT STATS ===================== -->
+<section class="stats-section" aria-labelledby="stats-title">
+  <div class="container">
+    <div class="section-head reveal" style="margin-bottom:44px;">
+      <p class="eyebrow" style="color:var(--gold);justify-content:center;">Our Impact</p>
+      <h2 id="stats-title" style="color:#fff;">Building Peace, One Community at a Time</h2>
+    </div>
+    <div class="stat-grid reveal">
+      <div>
+        <div class="stat-num" id="stat-cases">0</div>
+        <div class="stat-label">Cases Reported</div>
+      </div>
+      <div>
+        <div class="stat-num" id="stat-chats">0</div>
+        <div class="stat-label">Dialogue Sessions</div>
+      </div>
+      <div>
+        <div class="stat-num" id="stat-certs">0</div>
+        <div class="stat-label">Certificates Issued</div>
+      </div>
+      <div>
+        <div class="stat-num">🌍</div>
+        <div class="stat-label">All Districts Covered</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BOOKS TEASER ===================== -->
+<section aria-labelledby="books-teaser-title" style="padding:80px 0;">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow" style="justify-content:center;color:var(--green-deep);">Peace Library</p>
+      <h2 id="books-teaser-title">Six Books That Can Change a Community</h2>
+      <p>Curated stories and guides about how real communities chose dialogue over conflict. Read them, watch the videos, and earn your certificate.</p>
+    </div>
+    <div class="books-strip reveal" role="list" aria-label="Featured peace books">
+      <div class="book-chip" role="listitem">
+        <div class="cover" aria-hidden="true">📖</div>
+        <div class="title">The Art of Peace</div>
+      </div>
+      <div class="book-chip" role="listitem">
+        <div class="cover" aria-hidden="true">🕊️</div>
+        <div class="title">Voices Across the River</div>
+      </div>
+      <div class="book-chip" role="listitem">
+        <div class="cover" aria-hidden="true">🤝</div>
+        <div class="title">Ubuntu: We Are Together</div>
+      </div>
+      <div class="book-chip" role="listitem">
+        <div class="cover" aria-hidden="true">🌿</div>
+        <div class="title">Roots of Reconciliation</div>
+      </div>
+      <div class="book-chip" role="listitem">
+        <div class="cover" aria-hidden="true">💬</div>
+        <div class="title">Words That Heal</div>
+      </div>
+      <div class="book-chip" role="listitem">
+        <div class="cover" aria-hidden="true">🌅</div>
+        <div class="title">After the Storm</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;">
+      <a href="library.html" class="btn btn-green btn-lg">Open the Full Library →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ELECTION CTA ===================== -->
+<section class="bg-paper-dim" style="padding:72px 0;" aria-labelledby="election-cta-title">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;">
+      <div class="reveal">
+        <p class="eyebrow" style="color:var(--gold-deep);margin-bottom:16px;">Elections 2026</p>
+        <h2 id="election-cta-title">Your Vote Is Yours. Your Neighbor Is Still Your Neighbor.</h2>
+        <p style="color:#4b5a72;font-size:1.05rem;margin-bottom:24px;">Political differences do not have to become personal conflicts. If you witness election-related threats, intimidation, or violence, report it safely and anonymously through PeaceBridge.</p>
+        <a href="report.html" class="btn btn-primary">Report an Election Concern →</a>
+      </div>
+      <div class="reveal" aria-hidden="true" style="text-align:center;font-size:6rem;line-height:1;letter-spacing:6px;">
+        🗳️🤝🕊️
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CERT TEASER ===================== -->
+<section style="padding:80px 0;text-align:center;" aria-labelledby="cert-teaser-title">
+  <div class="container">
+    <div class="reveal" style="max-width:660px;margin:0 auto;">
+      <div style="font-size:4.5rem;margin-bottom:16px;" aria-hidden="true">🏅</div>
+      <p class="eyebrow" style="justify-content:center;color:var(--gold-deep);margin-bottom:14px;">Auto-Generated Certificate</p>
+      <h2 id="cert-teaser-title">Become a Certified PeaceBridge Champion</h2>
+      <p style="color:#4b5a72;font-size:1.05rem;margin-bottom:28px;">Complete our six-book peace library and video series, then instantly receive your official <strong>PeaceBridge Initiative Certificate</strong> — printable and shareable.</p>
+      <a href="library.html" class="btn btn-gold btn-lg">Start Learning to Earn →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <img src="/icon.jpeg" alt="PeaceBridge logo" width="42" height="42">
+          <div>
+            <strong style="color:#fff;font-family:var(--font-display);">PeaceBridge</strong><br>
+            <small style="color:#8593a8;">Initiative</small>
+          </div>
+        </div>
+        <p style="font-size:.88rem;max-width:240px;color:#8593a8;margin-bottom:16px;">Voices United for Peace and Progress. Empowering young people through dialogue and peaceful communities.</p>
+        <div class="lang-switch">
+          <label for="lang-sel" class="sr-only">Choose language</label>
+          <select id="lang-sel" onchange="changeLang(this.value)" aria-label="Language selector">
+            <option value="en">🌐 English</option>
+            <option value="sw">Kiswahili</option>
+            <option value="lg">Luganda</option>
+            <option value="ac">Acholi</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="report.html">Report a Case</a>
+        <a href="dialogue.html">AI Dialogue</a>
+        <a href="library.html">Library</a>
+        <a href="community.html">Community</a>
+        <a href="certificate.html">Certificate</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="library.html#books">Peace Books</a>
+        <a href="library.html#videos">Videos</a>
+        <a href="report.html">Anonymous Report</a>
+        <a href="certificate.html">Get Certified</a>
+        <a href="community.html">Comments & Ideas</a>
+      </div>
+      <div>
+        <h4>Contact &amp; Legal</h4>
+        <a href="contact.html">Contact Us</a>
+        <a href="about.html#mission">Our Mission</a>
+        <a href="#" aria-label="Privacy policy">Privacy Policy</a>
+        <a href="#" aria-label="Terms of use">Terms of Use</a>
+        <div style="margin-top:16px;font-size:.82rem;color:#6070841;background:rgba(255,255,255,.06);padding:10px 14px;border-radius:8px;">
+          <strong style="color:#c9d3e4;">Emergency?</strong><br>
+          <span style="color:#8593a8;">Kenya Police: <strong style="color:#fff;">999</strong><br>
+          Gender Violence: <strong style="color:#fff;">0800-100-066</strong></span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025–2026 PeaceBridge Initiative. All rights reserved.</span>
+      <span class="footer-olive">🌿 Copyright @catsrovercrew.ke 🌿</span>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="Scroll back to top" title="Back to top">↑</button>
+
+<script src="app.js"></script>
+<script>
+/* HOME-SPECIFIC JS */
+
+/* Animated floating particles */
+(function(){
+  const wrap = document.getElementById('particles');
+  if(!wrap) return;
+  const colors = ['#1B3358','#3F7D3F','#D9A53D','#2E8C9E'];
+  for(let i=0;i<18;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100 + '%';
+    p.style.bottom = Math.random()*30 + 'px';
+    p.style.background = colors[i%colors.length];
+    p.style.animationDuration = (6 + Math.random()*10) + 's';
+    p.style.animationDelay = (Math.random()*8) + 's';
+    p.style.width = p.style.height = (4 + Math.random()*8) + 'px';
+    wrap.appendChild(p);
+  }
+})();
+
+/* Count-up stats from local storage */
+(function(){
+  window.addEventListener('load', function(){
+    const cases = (PB.store.get('reports',[]) || []).length;
+    const chats = PB.store.get('total_chats', 0);
+    const certs = PB.store.get('total_certs', 0);
+    function countUp(el, target, duration){
+      if(!el) return;
+      const base = Math.max(target, 0);
+      const display = base + Math.floor(Math.random()*30) + 12; // add demo base
+      let start = null;
+      function step(ts){ if(!start) start=ts; const p=Math.min((ts-start)/duration,1); el.textContent=Math.floor(p*display); if(p<1) requestAnimationFrame(step); else el.textContent=display; }
+      requestAnimationFrame(step);
+    }
+    setTimeout(()=>{
+      countUp(document.getElementById('stat-cases'), cases, 1200);
+      countUp(document.getElementById('stat-chats'), chats, 1400);
+      countUp(document.getElementById('stat-certs'), certs, 1600);
+    }, 400);
+  });
+})();
+
+/* Language switcher (demo) */
+function changeLang(lang){
+  const msgs = {sw:'Lugha imebadilishwa — Kiswahili (hivi karibuni)',lg:'Olulimi lukyusiddwa — Luganda (mangu)',ac:'Leb obedo lokke — Acholi (cok)',en:'Language: English'};
+  if(lang !== 'en') { PB.announce(msgs[lang] || 'Language changed'); document.getElementById('lang-sel').value='en'; }
+}
+</script>
+</body>
+</html>
